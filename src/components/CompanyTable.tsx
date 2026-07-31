@@ -6,10 +6,9 @@ interface CompanyTableProps {
   companies: Company[]
 }
 
-const TIER_STYLES: Record<Company['mcapTier'], string> = {
-  Large: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
-  Mid: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
-  Small: 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300',
+function formatMcap(v: number) {
+  if (v >= 100000) return `₹${(v / 100000).toFixed(2)} L Cr`
+  return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })} Cr`
 }
 
 export function CompanyTable({ sector, companies }: CompanyTableProps) {
@@ -17,13 +16,19 @@ export function CompanyTable({ sector, companies }: CompanyTableProps) {
   const [search, setSearch] = useState('')
 
   const filtered = useMemo(() => {
-    return companies.filter((c) => {
-      if (subSectorFilter !== 'all' && c.subSectorId !== subSectorFilter) return false
-      if (search && !c.name.toLowerCase().includes(search.toLowerCase()) && !c.ticker.toLowerCase().includes(search.toLowerCase())) {
-        return false
-      }
-      return true
-    })
+    return companies
+      .filter((c) => {
+        if (subSectorFilter !== 'all' && c.subSectorId !== subSectorFilter) return false
+        if (
+          search &&
+          !c.name.toLowerCase().includes(search.toLowerCase()) &&
+          !c.isin.toLowerCase().includes(search.toLowerCase())
+        ) {
+          return false
+        }
+        return true
+      })
+      .sort((a, b) => b.marketCapCr - a.marketCapCr)
   }, [companies, subSectorFilter, search])
 
   return (
@@ -31,7 +36,7 @@ export function CompanyTable({ sector, companies }: CompanyTableProps) {
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <input
           type="text"
-          placeholder="Search company or ticker…"
+          placeholder="Search company or ISIN…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400"
@@ -55,31 +60,39 @@ export function CompanyTable({ sector, companies }: CompanyTableProps) {
           <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
             <tr>
               <th className="px-4 py-2 font-medium">Company</th>
-              <th className="px-4 py-2 font-medium">Ticker</th>
               <th className="px-4 py-2 font-medium">Sub-sector</th>
-              <th className="px-4 py-2 font-medium">Mcap tier</th>
+              <th className="px-4 py-2 font-medium text-right">Market cap</th>
+              <th className="px-4 py-2 font-medium text-right">Price</th>
+              <th className="px-4 py-2 font-medium text-right">P/BV</th>
+              <th className="px-4 py-2 font-medium text-right">TTM PE</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((c) => (
               <tr key={c.id} className="border-t border-zinc-100 dark:border-zinc-800">
-                <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">{c.name}</td>
-                <td className="px-4 py-2 font-mono text-xs text-zinc-500 dark:text-zinc-400">{c.ticker}</td>
-                <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400">
-                  {sector.subSectors.find((s) => s.id === c.subSectorId)?.name}
-                </td>
-                <td className="px-4 py-2">
-                  <span className={`rounded-full px-2 py-0.5 text-xs ${TIER_STYLES[c.mcapTier]}`}>
-                    {c.mcapTier}
-                  </span>
-                  {c.verifyMcap && (
-                    <span
-                      title="Borderline vs the >1,000 Cr threshold — verify current market cap"
-                      className="ml-1.5 text-xs text-amber-600 dark:text-amber-400"
-                    >
+                <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">
+                  {c.name}
+                  {c.note && (
+                    <span title={c.note} className="ml-1.5 text-xs text-amber-600 dark:text-amber-400">
                       ⚠
                     </span>
                   )}
+                  <div className="font-mono text-[11px] text-zinc-400 dark:text-zinc-500">{c.isin}</div>
+                </td>
+                <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400">
+                  {sector.subSectors.find((s) => s.id === c.subSectorId)?.name}
+                </td>
+                <td className="px-4 py-2 text-right text-zinc-900 dark:text-zinc-100 tabular-nums">
+                  {formatMcap(c.marketCapCr)}
+                </td>
+                <td className="px-4 py-2 text-right text-zinc-600 dark:text-zinc-400 tabular-nums">
+                  {c.latestPrice != null ? `₹${c.latestPrice.toLocaleString('en-IN')}` : '—'}
+                </td>
+                <td className="px-4 py-2 text-right text-zinc-600 dark:text-zinc-400 tabular-nums">
+                  {c.priceToBV != null ? `${c.priceToBV}x` : '—'}
+                </td>
+                <td className="px-4 py-2 text-right text-zinc-600 dark:text-zinc-400 tabular-nums">
+                  {c.ttmPE != null ? `${c.ttmPE}x` : '—'}
                 </td>
               </tr>
             ))}

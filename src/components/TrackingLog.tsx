@@ -66,7 +66,7 @@ export function TrackingLog({ entries, triggers, companies }: TrackingLogProps) 
                 {relatedCompanies.length > 0 && (
                   <span>
                     · Related:{' '}
-                    {relatedCompanies.map((c) => c.ticker).join(', ')}
+                    {relatedCompanies.map((c) => c.name).join(', ')}
                   </span>
                 )}
               </div>

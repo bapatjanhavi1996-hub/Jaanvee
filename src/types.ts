@@ -1,5 +1,3 @@
-export type McapTier = 'Large' | 'Mid' | 'Small'
-
 export interface SubSector {
   id: string
   name: string
@@ -16,11 +14,15 @@ export interface Sector {
 export interface Company {
   id: string
   name: string
-  ticker: string
+  isin: string
   sectorId: string
   subSectorId: string
-  mcapTier: McapTier
-  verifyMcap?: boolean
+  industryLabel: string
+  marketCapCr: number
+  latestPrice: number | null
+  priceToBV: number | null
+  ttmPE: number | null
+  note?: string
 }
 
 export type TriggerFrequency =
