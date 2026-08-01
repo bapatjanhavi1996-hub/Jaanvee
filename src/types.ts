@@ -109,6 +109,7 @@ export interface SystemCreditDepositPoint {
   asOf: string
   creditGrowthYoy: number | null
   depositGrowthYoy: number | null
+  cdRatio: number | null
   note?: string
   source: string
 }
@@ -119,6 +120,10 @@ export interface SystemAssetQualityPoint {
   nnpa: number | null
   crar: number | null
   cet1: number | null
+  casa: number | null
+  casaAsOf: string | null
+  cdRatio: number | null
+  cdRatioAsOf: string | null
   source: string
 }
 
