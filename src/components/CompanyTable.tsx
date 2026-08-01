@@ -4,6 +4,7 @@ import type { Company, Sector } from '../types'
 interface CompanyTableProps {
   sector: Sector
   companies: Company[]
+  onSelectCompany: (id: string) => void
 }
 
 function formatMcap(v: number) {
@@ -11,7 +12,7 @@ function formatMcap(v: number) {
   return `₹${v.toLocaleString('en-IN', { maximumFractionDigits: 0 })} Cr`
 }
 
-export function CompanyTable({ sector, companies }: CompanyTableProps) {
+export function CompanyTable({ sector, companies, onSelectCompany }: CompanyTableProps) {
   const [subSectorFilter, setSubSectorFilter] = useState<string>('all')
   const [search, setSearch] = useState('')
 
@@ -69,7 +70,11 @@ export function CompanyTable({ sector, companies }: CompanyTableProps) {
           </thead>
           <tbody>
             {filtered.map((c) => (
-              <tr key={c.id} className="border-t border-zinc-100 dark:border-zinc-800">
+              <tr
+                key={c.id}
+                onClick={() => onSelectCompany(c.id)}
+                className="border-t border-zinc-100 dark:border-zinc-800 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-900/50"
+              >
                 <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">
                   {c.name}
                   {c.note && (
