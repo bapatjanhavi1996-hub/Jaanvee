@@ -13,6 +13,7 @@ import { TriggerList } from './components/TriggerList'
 import { CompanyTable } from './components/CompanyTable'
 import { TrackingLog } from './components/TrackingLog'
 import { CompanyDetail } from './components/CompanyDetail'
+import { SectorAggregates } from './components/SectorAggregates'
 
 function App() {
   const [selectedSectorId, setSelectedSectorId] = useState(sectors[0].id)
@@ -77,6 +78,7 @@ function App() {
               />
             )}
             {view === 'triggers' && <TriggerList triggers={sectorTriggers} />}
+            {view === 'sectorData' && <SectorAggregates sectorId={sector.id} />}
             {view === 'universe' && (
               <CompanyTable
                 sector={sector}

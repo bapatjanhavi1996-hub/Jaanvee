@@ -96,3 +96,36 @@ export interface ManagementCommentary {
   summary: string
   source: string
 }
+
+export interface RepoRateEvent {
+  date: string
+  rate: number
+  action: 'Cut' | 'Hold' | 'Hike'
+  changeBps: number
+  source: string
+}
+
+export interface SystemCreditDepositPoint {
+  asOf: string
+  creditGrowthYoy: number | null
+  depositGrowthYoy: number | null
+  note?: string
+  source: string
+}
+
+export interface SystemAssetQualityPoint {
+  asOf: string
+  gnpa: number | null
+  nnpa: number | null
+  crar: number | null
+  cet1: number | null
+  source: string
+}
+
+export interface NbfcSectorPoint {
+  asOf: string
+  aumRsLakhCr: number | null
+  creditGrowthGuidance: string | null
+  microfinanceGnpa: number | null
+  source: string
+}

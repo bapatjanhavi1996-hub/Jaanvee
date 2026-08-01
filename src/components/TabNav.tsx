@@ -1,8 +1,9 @@
-export type ViewId = 'overview' | 'triggers' | 'universe' | 'log'
+export type ViewId = 'overview' | 'triggers' | 'universe' | 'log' | 'sectorData'
 
 const TABS: { id: ViewId; label: string }[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'triggers', label: 'Triggers' },
+  { id: 'sectorData', label: 'Sector Data' },
   { id: 'universe', label: 'Company Universe' },
   { id: 'log', label: 'Tracking Log' },
 ]
