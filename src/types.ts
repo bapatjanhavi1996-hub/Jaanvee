@@ -59,3 +59,40 @@ export interface TrackingLogEntry {
   source: string
   impact: TriggerImpact
 }
+
+export interface QuarterlyFinancial {
+  period: string
+  totalIncome: number
+  operatingProfit: number | null
+  pat: number | null
+}
+
+export interface BankMetricQuarter {
+  period: string
+  deposits: number | null
+  advancesOrAum: number | null
+  nim: number | null
+  casa: number | null
+  costOfFunds: number | null
+  gnpa: number | null
+  nnpa: number | null
+  costToIncome: number | null
+  source: string
+}
+
+export type CommentaryTheme =
+  | 'Asset Quality'
+  | 'Growth'
+  | 'CASA / Funding Mix'
+  | 'NIM / Margins'
+  | 'Cost of Borrowings'
+  | 'Opex Efficiency'
+
+export interface ManagementCommentary {
+  id: string
+  companyId: string
+  quarter: string
+  theme: CommentaryTheme
+  summary: string
+  source: string
+}
