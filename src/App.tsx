@@ -5,6 +5,7 @@ import { triggers } from './data/triggers'
 import { trackingLog } from './data/trackingLog'
 import { quarterlyFinancials } from './data/quarterlyFinancials'
 import { bankMetrics } from './data/bankMetrics'
+import { steelMetrics } from './data/steelMetrics'
 import { managementCommentary } from './data/managementCommentary'
 import { Sidebar } from './components/Sidebar'
 import { TabNav, type ViewId } from './components/TabNav'
@@ -62,6 +63,7 @@ function App() {
             subSectorName={selectedCompanySubSectorName}
             quarters={quarterlyFinancials[selectedCompany.id] ?? []}
             bankQuarters={bankMetrics[selectedCompany.id] ?? []}
+            steelQuarters={steelMetrics[selectedCompany.id] ?? []}
             commentary={managementCommentary.filter((c) => c.companyId === selectedCompany.id)}
             onBack={() => setSelectedCompanyId(null)}
           />

@@ -27,6 +27,20 @@ export const sectors: Sector[] = [
       { id: 'nbfc-infra', name: 'Infra / PSU Lending Institutions' },
     ],
   },
-  // Add the next sector here once you're ready to expand beyond financial lenders,
+  {
+    id: 'steel',
+    name: 'Steel',
+    shortDescription:
+      'Integrated & long-product steel makers, flat-product/value-added producers, alloy & stainless steel, tubes/pipes, and raw-material (iron ore) names listed on NSE/BSE.',
+    status: 'active',
+    subSectors: [
+      { id: 'steel-integrated-long', name: 'Integrated & Long Products' },
+      { id: 'steel-flat-valueadded', name: 'Flat Products / Value-added' },
+      { id: 'steel-alloy-stainless', name: 'Alloy & Stainless Steel' },
+      { id: 'steel-tubes-pipes', name: 'Tubes, Pipes & Downstream' },
+      { id: 'steel-rawmaterials', name: 'Iron Ore & Raw Materials' },
+    ],
+  },
+  // Add the next sector here once you're ready to expand further,
   // e.g. { id: 'it-services', name: 'IT Services', status: 'planned', subSectors: [...] }
 ]

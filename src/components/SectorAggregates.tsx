@@ -1,4 +1,5 @@
 import { repoRateHistory, systemCreditDeposit, systemAssetQuality, nbfcSectorAggregates } from '../data/sectorAggregates'
+import { steelProduction, steelH1Fy26ProductionNote, steelPriceBenchmarks, steelTradePolicy } from '../data/steelSectorAggregates'
 
 interface SectorAggregatesProps {
   sectorId: string
@@ -10,11 +11,13 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
       <div>
         <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">Sector Data</h2>
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl">
-          System-wide RBI/industry aggregates — the macro backdrop every company-level trigger
-          and trend in this dashboard should be read against.
+          {sectorId === 'steel'
+            ? 'System-wide steel production, pricing and trade-policy data — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'
+            : 'System-wide RBI/industry aggregates — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'}
         </p>
       </div>
 
+      {sectorId !== 'steel' && (
       <section>
         <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
           RBI Repo Rate
@@ -60,6 +63,7 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
           more mid-2025 meetings not individually confirmed in sources checked.
         </p>
       </section>
+      )}
 
       {sectorId === 'banks' && (
         <>
@@ -217,6 +221,166 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
             {nbfcSectorAggregates[0]?.source}
           </p>
         </section>
+      )}
+
+      {sectorId === 'steel' && (
+        <>
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              India Crude Steel Production
+            </h3>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+              <table className="w-full text-sm">
+                <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <tr>
+                    <th className="px-4 py-2 font-medium">Month</th>
+                    <th className="px-4 py-2 font-medium text-right">Crude Steel Production</th>
+                    <th className="px-4 py-2 font-medium text-right">YoY Growth</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {steelProduction.map((p) => (
+                    <tr key={p.month} className="border-t border-zinc-100 dark:border-zinc-800">
+                      <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{p.month}</td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
+                        {p.crudeSteelProductionMt != null ? `${p.crudeSteelProductionMt} Mt` : '—'}
+                      </td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
+                        {p.productionGrowthYoyPct != null ? `${p.productionGrowthYoyPct}%` : '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">{steelH1Fy26ProductionNote}</p>
+            <div className="mt-1 space-y-0.5">
+              {Array.from(new Set(steelProduction.map((p) => p.source))).map((s) => (
+                <p key={s} className="text-xs text-zinc-400 dark:text-zinc-500">{s}</p>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Price &amp; Cost Benchmarks
+            </h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+              Unlike RBI banking data, there is no single free authoritative index for Indian steel
+              prices — SteelMint/BigMint/Kallanish are the industry-standard sources and are
+              paywalled. Each figure below is a separately-sourced spot reading with its own as-of
+              date; domestic HRC/rebar are directional ranges from commercial listings, not
+              benchmark index prints.
+            </p>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+              <table className="w-full text-sm">
+                <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <tr>
+                    <th className="px-4 py-2 font-medium">Metric</th>
+                    <th className="px-4 py-2 font-medium text-right">Reading</th>
+                    <th className="px-4 py-2 font-medium">As of</th>
+                    <th className="px-4 py-2 font-medium">Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t border-zinc-100 dark:border-zinc-800">
+                    <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">Domestic HRC (ex-plant)</td>
+                    <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                      {steelPriceBenchmarks.domesticHrcPriceRange ?? '—'}
+                    </td>
+                    <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
+                      {steelPriceBenchmarks.domesticHrcAsOf ?? '—'}
+                    </td>
+                    <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">{steelPriceBenchmarks.domesticHrcNote}</td>
+                  </tr>
+                  <tr className="border-t border-zinc-100 dark:border-zinc-800">
+                    <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">Domestic Rebar / TMT (12mm Fe500D)</td>
+                    <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                      {steelPriceBenchmarks.domesticRebarPriceRange ?? '—'}
+                    </td>
+                    <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
+                      {steelPriceBenchmarks.domesticRebarAsOf ?? '—'}
+                    </td>
+                    <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">{steelPriceBenchmarks.domesticRebarNote}</td>
+                  </tr>
+                  <tr className="border-t border-zinc-100 dark:border-zinc-800">
+                    <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">China HRC Export (FOB Tianjin)</td>
+                    <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                      {steelPriceBenchmarks.chinaHrcFobUsdTonne != null ? `$${steelPriceBenchmarks.chinaHrcFobUsdTonne}/t` : '—'}
+                    </td>
+                    <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
+                      {steelPriceBenchmarks.chinaHrcFobAsOf ?? '—'}
+                    </td>
+                    <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">
+                      The key global benchmark/floor Indian domestic prices are compared against.
+                    </td>
+                  </tr>
+                  <tr className="border-t border-zinc-100 dark:border-zinc-800">
+                    <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">Iron Ore (domestic fines, 58-60% Fe)</td>
+                    <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                      {steelPriceBenchmarks.ironOreDomesticRsTonne != null ? `₹${steelPriceBenchmarks.ironOreDomesticRsTonne.toLocaleString('en-IN')}/t` : '—'}
+                    </td>
+                    <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
+                      {steelPriceBenchmarks.ironOreAsOf ?? '—'}
+                    </td>
+                    <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">{steelPriceBenchmarks.ironOreNote}</td>
+                  </tr>
+                  <tr className="border-t border-zinc-100 dark:border-zinc-800">
+                    <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">Coking Coal (Australian premium HCC, FOB)</td>
+                    <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                      {steelPriceBenchmarks.cokingCoalUsdTonne != null ? `$${steelPriceBenchmarks.cokingCoalUsdTonne}/t` : '—'}
+                    </td>
+                    <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
+                      {steelPriceBenchmarks.cokingCoalAsOf ?? '—'}
+                    </td>
+                    <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">
+                      Single bid observation, not a weekly index — India imports ~85% of coking coal requirement.
+                    </td>
+                  </tr>
+                  <tr className="border-t border-zinc-100 dark:border-zinc-800">
+                    <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">Industry Capacity Utilization</td>
+                    <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                      {steelPriceBenchmarks.capacityUtilizationPct != null ? `${steelPriceBenchmarks.capacityUtilizationPct}%` : '—'}
+                    </td>
+                    <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400 whitespace-nowrap">—</td>
+                    <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">{steelPriceBenchmarks.capacityUtilizationNote}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Trade Policy
+            </h3>
+            <div className="space-y-3">
+              {steelTradePolicy.map((e) => (
+                <div key={`${e.date}-${e.product}`} className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-medium text-zinc-900 dark:text-zinc-50">{e.measure}</p>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{e.date} · {e.product}</p>
+                    </div>
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-1 text-xs ${
+                        e.status === 'Imposed' || e.status === 'Extended'
+                          ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
+                          : e.status === 'Expired'
+                            ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300'
+                            : 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300'
+                      }`}
+                    >
+                      {e.status}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300">{e.detail}</p>
+                  <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">Source: {e.source}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        </>
       )}
     </div>
   )

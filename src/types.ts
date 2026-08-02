@@ -134,3 +134,51 @@ export interface NbfcSectorPoint {
   microfinanceGnpa: number | null
   source: string
 }
+
+export interface SteelMetricQuarter {
+  period: string
+  salesVolumeTonnes: number | null
+  realizationPerTonne: number | null
+  ebitdaPerTonne: number | null
+  capacityUtilization: number | null
+  netDebtToEbitda: number | null
+  source: string
+}
+
+export interface SteelProductionPoint {
+  month: string
+  crudeSteelProductionMt: number | null
+  productionGrowthYoyPct: number | null
+  source: string
+}
+
+// Unlike production, these have no clean weekly/monthly benchmark index publicly
+// available (SteelMint/BigMint/Kallanish are paywalled) -- each field is a
+// separately-sourced spot reading, so each carries its own as-of date rather
+// than sharing one across the row.
+export interface SteelPriceBenchmarks {
+  domesticHrcPriceRange: string | null
+  domesticHrcAsOf: string | null
+  domesticHrcNote: string | null
+  domesticRebarPriceRange: string | null
+  domesticRebarAsOf: string | null
+  domesticRebarNote: string | null
+  chinaHrcFobUsdTonne: number | null
+  chinaHrcFobAsOf: string | null
+  ironOreDomesticRsTonne: number | null
+  ironOreAsOf: string | null
+  ironOreNote: string | null
+  cokingCoalUsdTonne: number | null
+  cokingCoalAsOf: string | null
+  capacityUtilizationPct: number | null
+  capacityUtilizationNote: string | null
+}
+
+export interface TradePolicyEvent {
+  date: string
+  measure: string
+  product: string
+  status: 'Imposed' | 'Extended' | 'Under review' | 'Expired' | 'Recommended'
+  detail: string
+  source: string
+}

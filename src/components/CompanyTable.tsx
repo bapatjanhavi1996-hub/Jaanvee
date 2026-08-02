@@ -104,7 +104,13 @@ export function CompanyTable({ sector, companies, onSelectCompany }: CompanyTabl
           </tbody>
         </table>
       </div>
-      {filtered.length === 0 && (
+      {filtered.length === 0 && companies.length === 0 && (
+        <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4">
+          No company universe loaded for {sector.name} yet — share a data export and it'll be added
+          to <code className="text-[11px]">src/data/companies.ts</code>.
+        </p>
+      )}
+      {filtered.length === 0 && companies.length > 0 && (
         <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">No companies match this filter.</p>
       )}
     </div>

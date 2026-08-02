@@ -314,4 +314,159 @@ export const triggers: Trigger[] = [
     typicalSource: 'Company results, earnings call transcripts',
     frequency: 'Quarterly',
   },
+
+  // ---------------- STEEL ----------------
+  {
+    id: 'steel-china-global-prices',
+    sectorId: 'steel',
+    category: 'Macro / Global',
+    name: 'Global Steel Prices & China Exports',
+    description:
+      'China produces and exports more steel than any other country by a wide margin; its domestic demand weakness pushes surplus tonnage into export markets, setting a floor/ceiling on global HRC/rebar prices that Indian domestic prices trade in relation to.',
+    whyItMatters:
+      'When China HRC export prices fall, cheap imports pressure Indian domestic realizations even without any change in Indian demand — this is the single biggest swing factor in Indian steel spreads, and it moves faster than company fundamentals.',
+    watchFor: [
+      'China HRC/rebar export price (FOB, USD/tonne) trend',
+      'China property-sector demand data and steel mill utilization',
+      'Landed import price into India vs domestic ex-plant price',
+    ],
+    typicalSource: 'SteelMint, Kallanish, Platts/S&P Global, worldsteel',
+    frequency: 'Continuous / Real-time',
+  },
+  {
+    id: 'steel-raw-material-costs',
+    sectorId: 'steel',
+    category: 'Costs / Inputs',
+    name: 'Iron Ore & Coking Coal Costs',
+    description:
+      'Iron ore (largely domestic in India, but priced off global benchmarks) and coking coal (India imports ~85% of requirement, mostly from Australia) are the two dominant input costs for integrated steelmakers.',
+    whyItMatters:
+      'Spread (realization minus input cost) drives profitability far more than revenue growth in a commodity business — a rising raw-material basket compresses EBITDA/tonne even if steel prices are flat, and vice versa.',
+    watchFor: [
+      'Odisha iron ore auction/e-auction premiums and domestic fines price',
+      'Australian premium hard coking coal benchmark price (USD/tonne)',
+      'Company-level raw material cost/tonne guidance vs realized',
+    ],
+    typicalSource: 'SteelMint, Odisha Mining Corporation e-auctions, company investor presentations',
+    frequency: 'Monthly',
+  },
+  {
+    id: 'steel-trade-policy',
+    sectorId: 'steel',
+    category: 'Policy / Trade',
+    name: 'Safeguard & Anti-dumping Duties',
+    description:
+      'Government imposes/extends safeguard duty, anti-dumping duty (ADD) or countervailing duty (CVD) on specific steel product categories, typically targeted at China, Vietnam, Japan, Korea and Russia.',
+    whyItMatters:
+      'A new or extended duty is one of the few triggers that can re-rate the whole domestic sector overnight by removing import competition — conversely, a duty lapsing or being struck down at WTO is a negative catalyst.',
+    watchFor: [
+      'DGTR (Directorate General of Trade Remedies) investigation outcomes and recommendations',
+      'Ministry of Finance notification confirming/rejecting DGTR recommendation',
+      'Product scope and rate (%) of any imposed duty, and expiry/review date',
+    ],
+    typicalSource: 'DGTR notifications, Ministry of Finance/CBIC circulars, business press',
+    frequency: 'Event-driven',
+  },
+  {
+    id: 'steel-domestic-demand-cycle',
+    sectorId: 'steel',
+    category: 'Demand',
+    name: 'Domestic Demand Cycle (Infra / Auto / Construction)',
+    description:
+      'Domestic steel demand is driven by government infra capex (roads, railways, metro), real estate/construction, and auto production — each with a different steel-grade mix (long products for construction, flat/value-added for auto and white goods).',
+    whyItMatters:
+      'A company\'s product mix determines which demand driver actually moves its volumes — a long-products maker is levered to construction/infra capex, while a flat-products/auto-grade maker tracks auto production and capex cycles instead.',
+    watchFor: [
+      'Government capex allocation (Union Budget, road/rail ministry spend run-rate)',
+      'Auto production volumes (SIAM data) as a proxy for flat/auto-grade steel demand',
+      'Real estate launches/absorption data in top cities',
+    ],
+    typicalSource: 'Union Budget documents, SIAM, JPC demand data, real-estate research (Knight Frank/CBRE)',
+    frequency: 'Monthly',
+  },
+  {
+    id: 'steel-capacity-utilization-capex',
+    sectorId: 'steel',
+    category: 'Fundamentals',
+    name: 'Capacity Utilization & Expansion Capex',
+    description:
+      'Steel is capital-intensive with multi-year capacity-addition cycles; utilization % directly drives operating leverage, and most large Indian producers (Tata Steel, JSW Steel, JSPL) are mid-way through announced brownfield/greenfield expansions.',
+    whyItMatters:
+      'Because fixed costs are high, a swing in utilization moves EBITDA/tonne much more than a similar swing in realization — new capacity coming online also determines whether a company can capture an upcycle or is still absorbing commissioning costs.',
+    watchFor: [
+      'Reported capacity utilization % trend QoQ',
+      'Capex guidance and commissioning timelines for ongoing expansions',
+      'Net debt/EBITDA trend as expansions are funded',
+    ],
+    typicalSource: 'Company investor presentations, JPC industry capacity data',
+    frequency: 'Quarterly',
+  },
+  {
+    id: 'steel-quarterly-results',
+    sectorId: 'steel',
+    category: 'Fundamentals',
+    name: 'Quarterly Results (Realization, Spread, EBITDA/tonne)',
+    description:
+      'Sales volume, blended realization per tonne, EBITDA/tonne and net debt reported each quarter — the sector\'s standard normalized profitability metrics, since revenue growth alone is a poor signal in a cyclical commodity business.',
+    whyItMatters:
+      'EBITDA/tonne strips out the effect of price moves that are common to the whole sector and isolates company-specific cost/mix efficiency — a company growing EBITDA/tonne while peers don\'t is a genuine company-specific signal.',
+    watchFor: [
+      'EBITDA/tonne trend QoQ and vs peers',
+      'Volume growth vs realization growth split',
+      'Management guidance on spreads for the coming quarter',
+    ],
+    typicalSource: 'Quarterly results, investor presentations, earnings call transcripts',
+    frequency: 'Quarterly',
+  },
+  {
+    id: 'steel-government-capex-budget',
+    sectorId: 'steel',
+    category: 'Policy / Demand',
+    name: 'Government Infra Capex & Budget Allocation',
+    description:
+      'Union Budget allocations to roads, railways, and infrastructure ministries, plus National Infrastructure Pipeline / PM Gati Shakti execution pace, are a structural demand driver specific to India (distinct from the global price cycle).',
+    whyItMatters:
+      'Budget capex announcements move long-products and construction-grade steel demand expectations independent of what\'s happening to global steel prices — this is a domestic-only catalyst worth tracking separately from the China/global trigger.',
+    watchFor: [
+      'Union Budget capex allocation YoY (roads, rail, infra ministries)',
+      'Actual capex execution run-rate vs budgeted (often lags announcement)',
+      'PM Gati Shakti / National Infrastructure Pipeline project pipeline updates',
+    ],
+    typicalSource: 'Union Budget documents, Ministry of Road Transport/Railways press releases',
+    frequency: 'Annual',
+  },
+  {
+    id: 'steel-working-capital-debt',
+    sectorId: 'steel',
+    category: 'Balance Sheet',
+    name: 'Working Capital & Net Debt Cycle',
+    description:
+      'Steel companies carry heavy working capital (raw material and finished-goods inventory) that swells when prices rise and unwinds when they fall, on top of debt-funded capacity expansions.',
+    whyItMatters:
+      'Net debt/EBITDA can deteriorate sharply in a price downcycle even without any operational problem, purely from working capital and inventory revaluation — this is a key risk flag distinct from the P&L trend.',
+    watchFor: [
+      'Net debt/EBITDA trend QoQ',
+      'Inventory days and working-capital cycle length',
+      'Free cash flow generation vs capex commitments',
+    ],
+    typicalSource: 'Quarterly results, credit-rating agency reports (CRISIL, ICRA, CARE)',
+    frequency: 'Quarterly',
+  },
+  {
+    id: 'steel-pli-specialty',
+    sectorId: 'steel',
+    category: 'Policy',
+    name: 'PLI Scheme for Specialty Steel',
+    description:
+      'The Production Linked Incentive (PLI) scheme for specialty steel covers coated/plated steel, high-strength/wear-resistant steel, alloy steel, and electrical steel — incentivizing import substitution in higher-value grades.',
+    whyItMatters:
+      'Companies executing PLI-linked capacity for value-added/specialty grades get a structural margin and demand tailwind (import substitution + incentive payout) distinct from commodity steel economics.',
+    watchFor: [
+      'PLI scheme investment/production milestones met by individual companies',
+      'Incentive disbursement status and scheme extensions',
+      'Import substitution progress in coated/electrical/alloy steel categories',
+    ],
+    typicalSource: 'Ministry of Steel notifications, company PLI investment updates',
+    frequency: 'Event-driven',
+  },
 ]
