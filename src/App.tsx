@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
 import { sectors } from './data/sectors'
-import { companies } from './data/companies'
+import { companies as bankNbfcCompanies } from './data/companies'
+import { steelCompanies } from './data/steelCompanies'
 import { triggers } from './data/triggers'
 import { trackingLog } from './data/trackingLog'
-import { quarterlyFinancials } from './data/quarterlyFinancials'
+import { quarterlyFinancials as bankNbfcQuarterlyFinancials } from './data/quarterlyFinancials'
+import { steelQuarterlyFinancials } from './data/steelQuarterlyFinancials'
 import { bankMetrics } from './data/bankMetrics'
 import { steelMetrics } from './data/steelMetrics'
 import { managementCommentary } from './data/managementCommentary'
@@ -15,6 +17,9 @@ import { CompanyTable } from './components/CompanyTable'
 import { TrackingLog } from './components/TrackingLog'
 import { CompanyDetail } from './components/CompanyDetail'
 import { SectorAggregates } from './components/SectorAggregates'
+
+const companies = [...bankNbfcCompanies, ...steelCompanies]
+const quarterlyFinancials = { ...bankNbfcQuarterlyFinancials, ...steelQuarterlyFinancials }
 
 function App() {
   const [selectedSectorId, setSelectedSectorId] = useState(sectors[0].id)
