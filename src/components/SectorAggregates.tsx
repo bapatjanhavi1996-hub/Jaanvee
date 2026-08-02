@@ -1,5 +1,22 @@
 import { repoRateHistory, systemCreditDeposit, systemAssetQuality, nbfcSectorAggregates } from '../data/sectorAggregates'
 import { steelProduction, steelH1Fy26ProductionNote, steelPriceBenchmarks, steelTradePolicy } from '../data/steelSectorAggregates'
+import {
+  steelCapacityMt,
+  steelCapacityNote,
+  steelDemandMt,
+  steelDemandNote,
+  steelCapacityUtilizationPct,
+  steelCapacityUtilizationNote,
+  ironOreUsdTonne,
+  ironOreNote,
+  cokingCoalReferencePoints,
+  cokingCoalCaveat,
+  steelPriceReferencePoints,
+  steelPriceCaveat,
+  ebitdaPerTonneReferencePoints,
+  ebitdaPerTonneCaveat,
+} from '../data/steelCycles'
+import { MiniLineChart } from './MiniLineChart'
 
 interface SectorAggregatesProps {
   sectorId: string
@@ -380,8 +397,80 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
               ))}
             </div>
           </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              20-Year Cycle History
+            </h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+              Steel is deeply cyclical -- this is meant to help you recognize where in the cycle
+              you are by seeing it against the last two decades, not just the last few quarters.
+              Coverage is genuinely uneven: recent years (roughly FY19 onward, and iron ore since
+              2012) have solid sourced data; older years and two series in particular (coking coal,
+              steel price benchmark) have no clean free long-run index available, so those are
+              shown as scattered reference points rather than a continuous chart. Gaps are gaps,
+              not zeros -- read each chart's caption before drawing conclusions from it.
+            </p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+              <div>
+                <MiniLineChart title="India Steel Capacity" unit="Mt (installed)" points={steelCapacityMt} format={(v) => `${v} Mt`} />
+                <p className="mt-1.5 text-[11px] text-zinc-500 dark:text-zinc-400">{steelCapacityNote}</p>
+              </div>
+              <div>
+                <MiniLineChart title="India Steel Demand" unit="Mt (finished steel)" points={steelDemandMt} format={(v) => `${v} Mt`} />
+                <p className="mt-1.5 text-[11px] text-zinc-500 dark:text-zinc-400">{steelDemandNote}</p>
+              </div>
+              <div>
+                <MiniLineChart title="India Capacity Utilization" unit="%" points={steelCapacityUtilizationPct} format={(v) => `${v}%`} />
+                <p className="mt-1.5 text-[11px] text-zinc-500 dark:text-zinc-400">{steelCapacityUtilizationNote}</p>
+              </div>
+              <div>
+                <MiniLineChart title="Iron Ore Price" unit="USD/tonne, 62% Fe CFR China" points={ironOreUsdTonne} format={(v) => `$${v}/t`} />
+                <p className="mt-1.5 text-[11px] text-zinc-500 dark:text-zinc-400">{ironOreNote}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <ReferencePointPanel title="Coking Coal (reference points, USD/tonne)" points={cokingCoalReferencePoints} caveat={cokingCoalCaveat} format={(v) => `$${v}/t`} />
+              <ReferencePointPanel title="Steel Price Benchmark (reference points, World Export HRC USD/tonne)" points={steelPriceReferencePoints} caveat={steelPriceCaveat} format={(v) => `$${v}/t`} />
+              <ReferencePointPanel
+                title="EBITDA/tonne (Tata Steel proxy, ₹/tonne)"
+                points={ebitdaPerTonneReferencePoints}
+                caveat={ebitdaPerTonneCaveat}
+                format={(v) => `₹${v.toLocaleString('en-IN')}/t`}
+              />
+            </div>
+          </section>
         </>
       )}
+    </div>
+  )
+}
+
+interface ReferencePointPanelProps {
+  title: string
+  points: { label: string; value: number; note: string }[]
+  caveat: string
+  format: (v: number) => string
+}
+
+function ReferencePointPanel({ title, points, caveat, format }: ReferencePointPanelProps) {
+  return (
+    <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-3">
+      <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-2">{title}</p>
+      <div className="space-y-2">
+        {points.map((p) => (
+          <div key={p.label}>
+            <div className="flex items-baseline justify-between gap-2 text-xs">
+              <span className="text-zinc-500 dark:text-zinc-400 whitespace-nowrap">{p.label}</span>
+              <span className="text-zinc-900 dark:text-zinc-100 font-medium tabular-nums whitespace-nowrap">{format(p.value)}</span>
+            </div>
+            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 leading-snug">{p.note}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400">{caveat}</p>
     </div>
   )
 }

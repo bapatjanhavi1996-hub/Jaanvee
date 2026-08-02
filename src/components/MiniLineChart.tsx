@@ -3,6 +3,8 @@ import { useState } from 'react'
 export interface SeriesPoint {
   label: string
   value: number | null
+  /** True if this point does not represent the year/period immediately after the previous one -- renders the segment leading into it as dashed rather than implying continuous data across the gap. */
+  gapBefore?: boolean
 }
 
 interface MiniLineChartProps {
@@ -38,12 +40,12 @@ export function MiniLineChart({ title, unit, points, format, color }: MiniLineCh
   const xAt = (i: number) => PAD_LEFT + (n <= 1 ? plotW / 2 : (i / (n - 1)) * plotW)
   const yAt = (v: number) => PAD_TOP + plotH - ((v - (min - yPad)) / (range + yPad * 2)) * plotH
 
-  const segments: { x1: number; y1: number; x2: number; y2: number }[] = []
+  const segments: { x1: number; y1: number; x2: number; y2: number; dashed: boolean }[] = []
   for (let i = 0; i < n - 1; i++) {
     const a = points[i].value
     const b = points[i + 1].value
     if (a != null && b != null) {
-      segments.push({ x1: xAt(i), y1: yAt(a), x2: xAt(i + 1), y2: yAt(b) })
+      segments.push({ x1: xAt(i), y1: yAt(a), x2: xAt(i + 1), y2: yAt(b), dashed: !!points[i + 1].gapBefore })
     }
   }
 
@@ -87,7 +89,18 @@ export function MiniLineChart({ title, unit, points, format, color }: MiniLineCh
         />
 
         {segments.map((s, i) => (
-          <line key={i} x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke={lineColor} strokeWidth={2} strokeLinecap="round" />
+          <line
+            key={i}
+            x1={s.x1}
+            y1={s.y1}
+            x2={s.x2}
+            y2={s.y2}
+            stroke={lineColor}
+            strokeWidth={2}
+            strokeLinecap="round"
+            opacity={s.dashed ? 0.45 : 1}
+            strokeDasharray={s.dashed ? '5,4' : undefined}
+          />
         ))}
 
         {points.map((p, i) =>
