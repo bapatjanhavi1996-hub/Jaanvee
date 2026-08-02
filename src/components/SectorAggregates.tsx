@@ -50,7 +50,7 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
               </tr>
             </thead>
             <tbody>
-              {repoRateHistory.map((r) => (
+              {repoRateHistory.slice().reverse().map((r) => (
                 <tr key={r.date} className="border-t border-zinc-100 dark:border-zinc-800">
                   <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{r.date}</td>
                   <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">{r.rate}%</td>
@@ -100,7 +100,7 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {systemCreditDeposit.map((p) => (
+                  {systemCreditDeposit.slice().reverse().map((p) => (
                     <tr key={p.asOf} className="border-t border-zinc-100 dark:border-zinc-800">
                       <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{p.asOf}</td>
                       <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
@@ -148,7 +148,7 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {systemAssetQuality.map((p) => (
+                  {systemAssetQuality.slice().reverse().map((p) => (
                     <tr key={p.asOf} className="border-t border-zinc-100 dark:border-zinc-800">
                       <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{p.asOf}</td>
                       <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
@@ -193,7 +193,7 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
               </table>
             </div>
             <div className="mt-2 space-y-1">
-              {systemAssetQuality.map((p) => (
+              {systemAssetQuality.slice().reverse().map((p) => (
                 <p key={p.asOf} className="text-xs text-zinc-500 dark:text-zinc-400">
                   <span className="font-medium">{p.asOf}:</span> {p.source}
                 </p>
@@ -219,7 +219,7 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
                 </tr>
               </thead>
               <tbody>
-                {nbfcSectorAggregates.map((p) => (
+                {nbfcSectorAggregates.slice().reverse().map((p) => (
                   <tr key={p.asOf} className="border-t border-zinc-100 dark:border-zinc-800">
                     <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{p.asOf}</td>
                     <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
@@ -256,7 +256,7 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {steelProduction.map((p) => (
+                  {steelProduction.slice().reverse().map((p) => (
                     <tr key={p.month} className="border-t border-zinc-100 dark:border-zinc-800">
                       <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{p.month}</td>
                       <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
