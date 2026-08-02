@@ -52,7 +52,17 @@ function HeatRow({ row }: { row: Row }) {
   )
 }
 
+function toAscending(periods: string[], rows: Row[]): { periods: string[]; rows: Row[] } {
+  return {
+    periods: periods.slice().reverse(),
+    rows: rows.map((row) => ({ ...row, values: row.values.slice().reverse() })),
+  }
+}
+
 export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, steelQuarters, commentary, onBack }: CompanyDetailProps) {
+  // All source data (quarters/bankQuarters/steelQuarters) is newest-first --
+  // QoQ math below depends on that order. Columns are flipped to oldest-first
+  // (left to right) only at the very end, via toAscending(), for display.
   const periods = quarters.map((q) => q.period)
 
   const totalIncome = quarters.map((q) => q.totalIncome)
@@ -66,44 +76,48 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
     return ((q.totalIncome - next.totalIncome) / next.totalIncome) * 100
   })
 
-  const trendRows: Row[] = [
+  const { periods: periodsAsc, rows: trendRows } = toAscending(periods, [
     { label: 'Total Income (₹ Cr)', values: totalIncome, higherIsBetter: true, format: formatCr },
     { label: 'QoQ Growth (%)', values: qoqGrowth, higherIsBetter: true, format: formatPct },
     { label: 'Operating Profit (₹ Cr)', values: opProfit, higherIsBetter: true, format: formatCr },
     { label: 'Operating Margin (%)', values: opMargin, higherIsBetter: true, format: formatPct },
     { label: 'PAT (₹ Cr)', values: pat, higherIsBetter: true, format: formatCr },
     { label: 'Net Margin (%)', values: patMargin, higherIsBetter: true, format: formatPct },
-  ]
+  ])
 
-  const bankPeriods = bankQuarters.map((q) => q.period)
   const hasCasa = bankQuarters.some((q) => q.casa != null)
-  const bankRows: Row[] = bankQuarters.length
-    ? [
-        { label: 'Deposits (₹ Cr)', values: bankQuarters.map((q) => q.deposits), higherIsBetter: true, format: formatCr },
-        { label: 'Advances / AUM (₹ Cr)', values: bankQuarters.map((q) => q.advancesOrAum), higherIsBetter: true, format: formatCr },
-        { label: 'NIM (%)', values: bankQuarters.map((q) => q.nim), higherIsBetter: true, format: formatPct },
-        ...(hasCasa
-          ? [{ label: 'CASA (%)', values: bankQuarters.map((q) => q.casa), higherIsBetter: true, format: formatPct }]
-          : []),
-        { label: 'Cost of Funds (%)', values: bankQuarters.map((q) => q.costOfFunds), higherIsBetter: false, format: formatPct },
-        { label: 'GNPA (%)', values: bankQuarters.map((q) => q.gnpa), higherIsBetter: false, format: formatPct },
-        { label: 'NNPA (%)', values: bankQuarters.map((q) => q.nnpa), higherIsBetter: false, format: formatPct },
-        { label: 'Cost-to-Income (%)', values: bankQuarters.map((q) => q.costToIncome), higherIsBetter: false, format: formatPct },
-      ]
-    : []
+  const { periods: bankPeriodsAsc, rows: bankRows } = toAscending(
+    bankQuarters.map((q) => q.period),
+    bankQuarters.length
+      ? [
+          { label: 'Deposits (₹ Cr)', values: bankQuarters.map((q) => q.deposits), higherIsBetter: true, format: formatCr },
+          { label: 'Advances / AUM (₹ Cr)', values: bankQuarters.map((q) => q.advancesOrAum), higherIsBetter: true, format: formatCr },
+          { label: 'NIM (%)', values: bankQuarters.map((q) => q.nim), higherIsBetter: true, format: formatPct },
+          ...(hasCasa
+            ? [{ label: 'CASA (%)', values: bankQuarters.map((q) => q.casa), higherIsBetter: true, format: formatPct }]
+            : []),
+          { label: 'Cost of Funds (%)', values: bankQuarters.map((q) => q.costOfFunds), higherIsBetter: false, format: formatPct },
+          { label: 'GNPA (%)', values: bankQuarters.map((q) => q.gnpa), higherIsBetter: false, format: formatPct },
+          { label: 'NNPA (%)', values: bankQuarters.map((q) => q.nnpa), higherIsBetter: false, format: formatPct },
+          { label: 'Cost-to-Income (%)', values: bankQuarters.map((q) => q.costToIncome), higherIsBetter: false, format: formatPct },
+        ]
+      : [],
+  )
 
   const bankSources = Array.from(new Set(bankQuarters.map((q) => q.source).filter(Boolean)))
 
-  const steelPeriods = steelQuarters.map((q) => q.period)
-  const steelRows: Row[] = steelQuarters.length
-    ? [
-        { label: 'Sales Volume (tonnes)', values: steelQuarters.map((q) => q.salesVolumeTonnes), higherIsBetter: true, format: formatCr },
-        { label: 'Realization (₹/tonne)', values: steelQuarters.map((q) => q.realizationPerTonne), higherIsBetter: true, format: formatCr },
-        { label: 'EBITDA/tonne (₹)', values: steelQuarters.map((q) => q.ebitdaPerTonne), higherIsBetter: true, format: formatCr },
-        { label: 'Capacity Utilization (%)', values: steelQuarters.map((q) => q.capacityUtilization), higherIsBetter: true, format: formatPct },
-        { label: 'Net Debt/EBITDA (x)', values: steelQuarters.map((q) => q.netDebtToEbitda), higherIsBetter: false, format: (v) => (v != null ? `${v.toFixed(1)}x` : '—') },
-      ]
-    : []
+  const { periods: steelPeriodsAsc, rows: steelRows } = toAscending(
+    steelQuarters.map((q) => q.period),
+    steelQuarters.length
+      ? [
+          { label: 'Sales Volume (tonnes)', values: steelQuarters.map((q) => q.salesVolumeTonnes), higherIsBetter: true, format: formatCr },
+          { label: 'Realization (₹/tonne)', values: steelQuarters.map((q) => q.realizationPerTonne), higherIsBetter: true, format: formatCr },
+          { label: 'EBITDA/tonne (₹)', values: steelQuarters.map((q) => q.ebitdaPerTonne), higherIsBetter: true, format: formatCr },
+          { label: 'Capacity Utilization (%)', values: steelQuarters.map((q) => q.capacityUtilization), higherIsBetter: true, format: formatPct },
+          { label: 'Net Debt/EBITDA (x)', values: steelQuarters.map((q) => q.netDebtToEbitda), higherIsBetter: false, format: (v) => (v != null ? `${v.toFixed(1)}x` : '—') },
+        ]
+      : [],
+  )
 
   const steelSources = Array.from(new Set(steelQuarters.map((q) => q.source).filter(Boolean)))
 
@@ -156,15 +170,15 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
           Quarterly Trend
         </h3>
         <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3">
-          Consolidated, newest quarter first. This is the context layer — read the tracking-log
-          triggers against this trend, not in isolation.
+          Consolidated, oldest quarter first (left to right). This is the context layer — read the
+          tracking-log triggers against this trend, not in isolation.
         </p>
         <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
           <table className="text-sm border-collapse">
             <thead>
               <tr className="bg-zinc-50 dark:bg-zinc-900/50 text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                 <th className="px-3 py-2 text-left font-medium sticky left-0 bg-zinc-50 dark:bg-zinc-900/50">Particulars</th>
-                {periods.map((p) => (
+                {periodsAsc.map((p) => (
                   <th key={p} className="px-3 py-2 text-right font-medium whitespace-nowrap">
                     {p}
                   </th>
@@ -192,7 +206,7 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
                   <thead>
                     <tr className="bg-zinc-50 dark:bg-zinc-900/50 text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                       <th className="px-3 py-2 text-left font-medium sticky left-0 bg-zinc-50 dark:bg-zinc-900/50">Particulars</th>
-                      {bankPeriods.map((p) => (
+                      {bankPeriodsAsc.map((p) => (
                         <th key={p} className="px-3 py-2 text-right font-medium whitespace-nowrap">
                           {p}
                         </th>
@@ -234,7 +248,7 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
                   <thead>
                     <tr className="bg-zinc-50 dark:bg-zinc-900/50 text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                       <th className="px-3 py-2 text-left font-medium sticky left-0 bg-zinc-50 dark:bg-zinc-900/50">Particulars</th>
-                      {steelPeriods.map((p) => (
+                      {steelPeriodsAsc.map((p) => (
                         <th key={p} className="px-3 py-2 text-right font-medium whitespace-nowrap">
                           {p}
                         </th>
