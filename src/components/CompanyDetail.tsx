@@ -1,4 +1,4 @@
-import type { BankMetricQuarter, Company, ManagementCommentary, QuarterlyFinancial } from '../types'
+import type { BankMetricQuarter, Company, ManagementCommentary, QuarterlyFinancial, SteelMetricQuarter } from '../types'
 import { heatColor, heatTextColor } from '../lib/heatmap'
 
 interface CompanyDetailProps {
@@ -6,6 +6,7 @@ interface CompanyDetailProps {
   subSectorName: string
   quarters: QuarterlyFinancial[]
   bankQuarters: BankMetricQuarter[]
+  steelQuarters: SteelMetricQuarter[]
   commentary: ManagementCommentary[]
   onBack: () => void
 }
@@ -51,7 +52,7 @@ function HeatRow({ row }: { row: Row }) {
   )
 }
 
-export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, commentary, onBack }: CompanyDetailProps) {
+export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, steelQuarters, commentary, onBack }: CompanyDetailProps) {
   const periods = quarters.map((q) => q.period)
 
   const totalIncome = quarters.map((q) => q.totalIncome)
@@ -92,6 +93,19 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
     : []
 
   const bankSources = Array.from(new Set(bankQuarters.map((q) => q.source).filter(Boolean)))
+
+  const steelPeriods = steelQuarters.map((q) => q.period)
+  const steelRows: Row[] = steelQuarters.length
+    ? [
+        { label: 'Sales Volume (tonnes)', values: steelQuarters.map((q) => q.salesVolumeTonnes), higherIsBetter: true, format: formatCr },
+        { label: 'Realization (₹/tonne)', values: steelQuarters.map((q) => q.realizationPerTonne), higherIsBetter: true, format: formatCr },
+        { label: 'EBITDA/tonne (₹)', values: steelQuarters.map((q) => q.ebitdaPerTonne), higherIsBetter: true, format: formatCr },
+        { label: 'Capacity Utilization (%)', values: steelQuarters.map((q) => q.capacityUtilization), higherIsBetter: true, format: formatPct },
+        { label: 'Net Debt/EBITDA (x)', values: steelQuarters.map((q) => q.netDebtToEbitda), higherIsBetter: false, format: (v) => (v != null ? `${v.toFixed(1)}x` : '—') },
+      ]
+    : []
+
+  const steelSources = Array.from(new Set(steelQuarters.map((q) => q.source).filter(Boolean)))
 
   const themes: ManagementCommentary['theme'][] = [
     'Asset Quality',
@@ -166,45 +180,88 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
         </div>
       </section>
 
-      <section className="mb-8">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
-          Bank / NBFC Metrics
-        </h3>
-        {bankRows.length > 0 ? (
-          <>
-            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
-              <table className="text-sm border-collapse">
-                <thead>
-                  <tr className="bg-zinc-50 dark:bg-zinc-900/50 text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                    <th className="px-3 py-2 text-left font-medium sticky left-0 bg-zinc-50 dark:bg-zinc-900/50">Particulars</th>
-                    {bankPeriods.map((p) => (
-                      <th key={p} className="px-3 py-2 text-right font-medium whitespace-nowrap">
-                        {p}
-                      </th>
+      {(company.sectorId === 'banks' || company.sectorId === 'nbfc') && (
+        <section className="mb-8">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+            Bank / NBFC Metrics
+          </h3>
+          {bankRows.length > 0 ? (
+            <>
+              <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+                <table className="text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-zinc-50 dark:bg-zinc-900/50 text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                      <th className="px-3 py-2 text-left font-medium sticky left-0 bg-zinc-50 dark:bg-zinc-900/50">Particulars</th>
+                      {bankPeriods.map((p) => (
+                        <th key={p} className="px-3 py-2 text-right font-medium whitespace-nowrap">
+                          {p}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bankRows.map((row) => (
+                      <HeatRow key={row.label} row={row} />
                     ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {bankRows.map((row) => (
-                    <HeatRow key={row.label} row={row} />
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {bankSources.length > 0 && (
-              <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-500">
-                Sources: {bankSources.join(' · ')}
-              </p>
-            )}
-          </>
-        ) : (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4">
-            Not yet researched for this company — Deposits/AUM, NIM, CASA, cost of funds and
-            asset-quality trend aren't in the bulk data export and need per-company research.
-            Currently populated for a pilot set of large-cap names.
-          </p>
-        )}
-      </section>
+                  </tbody>
+                </table>
+              </div>
+              {bankSources.length > 0 && (
+                <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-500">
+                  Sources: {bankSources.join(' · ')}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4">
+              Not yet researched for this company — Deposits/AUM, NIM, CASA, cost of funds and
+              asset-quality trend aren't in the bulk data export and need per-company research.
+              Currently populated for a pilot set of large-cap names.
+            </p>
+          )}
+        </section>
+      )}
+
+      {company.sectorId === 'steel' && (
+        <section className="mb-8">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+            Steel Operating Metrics
+          </h3>
+          {steelRows.length > 0 ? (
+            <>
+              <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+                <table className="text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-zinc-50 dark:bg-zinc-900/50 text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                      <th className="px-3 py-2 text-left font-medium sticky left-0 bg-zinc-50 dark:bg-zinc-900/50">Particulars</th>
+                      {steelPeriods.map((p) => (
+                        <th key={p} className="px-3 py-2 text-right font-medium whitespace-nowrap">
+                          {p}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {steelRows.map((row) => (
+                      <HeatRow key={row.label} row={row} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {steelSources.length > 0 && (
+                <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-500">
+                  Sources: {steelSources.join(' · ')}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4">
+              No sales volume, realization/tonne, EBITDA/tonne or net debt data loaded for this
+              company yet — this needs a proper quarterly export, not the bulk screener data.
+            </p>
+          )}
+        </section>
+      )}
 
       <section>
         <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
