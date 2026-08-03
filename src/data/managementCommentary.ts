@@ -1,12 +1,15 @@
 import type { ManagementCommentary } from '../types'
 
 // Management commentary from quarterly concalls/investor presentations, tagged by
-// theme (Asset Quality, Growth, CASA/Funding Mix, NIM/Margins, Cost of Borrowings,
-// Opex Efficiency). This is the "why" layer behind the numbers in quarterlyFinancials
-// and bankMetrics. Deliberately scoped to the LATEST available concall/quarter per
-// company only, not a historical archive -- pilot coverage on large-cap names.
-// Where a theme wasn't addressed with a specific, sourceable statement in the latest
-// quarter, that theme is simply omitted rather than backfilled from an older quarter.
+// theme. Banks/NBFC use Asset Quality, Growth, CASA/Funding Mix, NIM/Margins, Cost
+// of Borrowings, Opex Efficiency; Steel uses Realization/Pricing, Raw Material
+// Costs, Capacity Utilization & Expansion, Demand Outlook, Trade Policy Impact,
+// Balance Sheet/Leverage. This is the "why" layer behind the numbers in
+// quarterlyFinancials/bankMetrics/steelMetrics. Deliberately scoped to the LATEST
+// available concall/quarter per company only, not a historical archive -- pilot
+// coverage on large-cap names. Where a theme wasn't addressed with a specific,
+// sourceable statement in the latest quarter, that theme is simply omitted rather
+// than backfilled from an older quarter.
 let n = 0
 const id = () => `mc-${++n}`
 
@@ -263,4 +266,54 @@ export const managementCommentary: ManagementCommentary[] = [
   { id: id(), companyId: 'au-small-finance-bank-ltd', quarter: 'Q1 FY27', theme: 'NIM / Margins', summary: 'NIM expanded 47 bps YoY to 5.9%, cited as part of the quarter’s balance-sheet momentum.', source: 'Univest.in, Q1 FY27' },
   { id: id(), companyId: 'au-small-finance-bank-ltd', quarter: 'Q1 FY27', theme: 'Cost of Borrowings', summary: 'Cost of funds declined 60 bps YoY and 1 bp QoQ to 6.48%.', source: 'Q1 FY27 results (aggregated)' },
   { id: id(), companyId: 'au-small-finance-bank-ltd', quarter: 'Q1 FY27', theme: 'Opex Efficiency', summary: 'Cost-to-assets (ex-CGFMU premium) was 4.0% vs 3.9% a year ago; PPoP grew 9% YoY to ₹1,435 Cr while opex grew 26% YoY to ₹1,949 Cr on distribution and technology investment, under an "AI-native banking transformation" strategy.', source: 'Univest.in, Q1 FY27' },
+
+  // ==================== STEEL ====================
+  // --- JSW Steel (Q1 FY27) ---
+  { id: id(), companyId: 'jsw-steel-ltd', quarter: 'Q1 FY27', theme: 'Balance Sheet / Leverage', summary: 'Net debt fell to ₹46,157 Cr from ₹79,850 Cr a year earlier (net debt/equity down to 0.42x from 0.95x); the Q1 FY27 investor presentation was headlined "deleveraging accelerates."', source: 'Investing.com, Q1 FY27 slides' },
+  { id: id(), companyId: 'jsw-steel-ltd', quarter: 'Q1 FY27', theme: 'Capacity Utilization & Expansion', summary: 'Capacity utilization ~94% (India operations, excluding the BF-3 shutdown); reiterated a long-term capacity target of 62 MT.', source: 'Sahi, Investing.com' },
+
+  // --- Tata Steel (Q1 FY27) ---
+  { id: id(), companyId: 'tata-steel-ltd', quarter: 'Q1 FY27', theme: 'Capacity Utilization & Expansion', summary: 'Board approved a ₹33,873 Cr expansion of the Neelachal Ispat Nigam plant; Q1 FY27 investor slides were headlined "India strength drives 40 mtpa expansion."', source: 'Business Standard, Investing.com' },
+  { id: id(), companyId: 'tata-steel-ltd', quarter: 'Q1 FY27', theme: 'Demand Outlook', summary: 'Analysts stayed bullish following results, citing India-led momentum, with some coverage flagging up to 29% further share-price upside.', source: 'Business Standard' },
+
+  // --- Steel Authority of India / SAIL (Q1 FY27) ---
+  { id: id(), companyId: 'steel-authority-of-india-ltd', quarter: 'Q1 FY27', theme: 'Balance Sheet / Leverage', summary: 'Company\'s own results release was headlined "Financial discipline and operational foresight drive SAIL\'s Q1 FY27 profit surge," citing net debt reduced to ₹21,729 Cr and debt/equity down to 0.36 (from 0.51 a year earlier).', source: 'SAIL official release' },
+
+  // --- Jindal Steel & Power / JSPL (Q4 FY26) ---
+  { id: id(), companyId: 'jindal-steel-ltd', quarter: 'Q4 FY26', theme: 'Realization / Pricing', summary: 'Attributed the quarter\'s realization gains to a shift toward value-added products (66% of sales mix); blended realization rose to ~₹61,900/tonne, up ₹4,766/tonne QoQ, partly crediting the safeguard duty on flat steel imports.', source: 'EquityBulls, Multibagg' },
+
+  // --- Shyam Metalics And Energy (Q1 FY27) ---
+  { id: id(), companyId: 'shyam-metalics-and-energy-ltd', quarter: 'Q1 FY27', theme: 'Growth', summary: 'Aluminium foil realizations rose 32.1% YoY alongside sharp volume growth across pig iron (+137.5% YoY) and pellets (+25.3% YoY) -- framed as broad-based momentum across its diversified product mix rather than a single-segment story.', source: 'EquityBulls, Investing.com' },
+
+  // --- Sarda Energy & Minerals (Q4 FY26) ---
+  { id: id(), companyId: 'sarda-energy-minerals-ltd', quarter: 'Q4 FY26', theme: 'Growth', summary: 'Publicly targets doubling consolidated EBITDA by FY30, alongside a 53% YoY profit jump in Q4 FY26.', source: 'Daily Guardian' },
+
+  // --- Godawari Power And Ispat (Q1 FY27) ---
+  { id: id(), companyId: 'godawari-power-and-ispat-ltd', quarter: 'Q1 FY27', theme: 'Raw Material Costs', summary: 'Flagged the temporary suspension of its 2.0 MnT Raipur pellet plant from 14-Jul-2026 (gas shortage) as a specific risk to Q2 FY27 profitability.', source: 'Business Upturn' },
+
+  // --- Jindal Stainless (Q4 FY26 -- Q1 FY27 not yet reported as of research date) ---
+  { id: id(), companyId: 'jindal-stainless-ltd', quarter: 'Q4 FY26', theme: 'Demand Outlook', summary: 'Guided FY27 EBITDA/tonne in the ₹18,000-20,000/tonne range, separately saying the business was running "comfortably above ₹20,000" on a current run-rate basis as of the Q4 FY26 call.', source: 'ScanX' },
+  { id: id(), companyId: 'jindal-stainless-ltd', quarter: 'Q4 FY26', theme: 'Capacity Utilization & Expansion', summary: 'Reaffirmed a target of 80-85% capacity utilization for FY26, and 70-80% for the Indonesia melt shop by FY27.', source: 'ScanX' },
+
+  // --- APL Apollo Tubes (Q1 FY27) ---
+  { id: id(), companyId: 'apl-apollo-tubes-ltd', quarter: 'Q1 FY27', theme: 'Capacity Utilization & Expansion', summary: 'Successfully tested its 5 MT installed capacity at ~90% utilization in Dec-2025; separately flagged the Dubai facility running below 50% utilization in Q1 FY27 due to West Asia supply disruptions.', source: 'Tradebrains, ScanX' },
+
+  // --- Welspun Corp (Q1 FY27) ---
+  { id: id(), companyId: 'welspun-corp-ltd', quarter: 'Q1 FY27', theme: 'Balance Sheet / Leverage', summary: 'Targets under 1x net debt/EBITDA through the cycle; posted a record ₹756 Cr EBITDA (+35% YoY) with net cash of ₹2,336 Cr this quarter.', source: 'Company results release' },
+
+  // --- Ratnamani Metals & Tubes (Q4 FY26 -- Q1 FY27 not yet reported as of research date) ---
+  { id: id(), companyId: 'ratnamani-metals-tubes-ltd', quarter: 'Q4 FY26', theme: 'Balance Sheet / Leverage', summary: 'Reiterated that the standalone entity is debt-free.', source: 'BSE filing commentary' },
+
+  // --- Jindal Saw (Q1 FY27) ---
+  { id: id(), companyId: 'jindal-saw-ltd', quarter: 'Q1 FY27', theme: 'Trade Policy Impact', summary: 'Attributed weaker Q1 FY27 margins partly to the suspension of its API license (Jan-mid-Jun 2026) and MENA/Strait of Hormuz supply disruptions, alongside lower capacity utilization.', source: 'SBI Securities-cited coverage' },
+
+  // --- Usha Martin (Q1 FY27) ---
+  { id: id(), companyId: 'usha-martin-ltd', quarter: 'Q1 FY27', theme: 'Growth', summary: 'Wire ropes segment EBITDA/tonne rose sharply from ₹28,502/tonne (Q1 FY26) to ₹40,581/tonne (Q1 FY27), alongside a swing from net debt to net cash (₹465 Cr) over the year.', source: 'SOIC-cited analysis' },
+
+  // --- NMDC (Q1 FY27) ---
+  { id: id(), companyId: 'nmdc-ltd', quarter: 'Q1 FY27', theme: 'Realization / Pricing', summary: 'Took iron ore price hikes of ₹500-600/tonne during the quarter.', source: 'Search-synthesized company disclosure coverage' },
+  { id: id(), companyId: 'nmdc-ltd', quarter: 'Q1 FY27', theme: 'Capacity Utilization & Expansion', summary: 'Noted it had "touched Environmental Clearance capacity" at all its mines for the first time as of April 2026.', source: 'Search-synthesized company disclosure coverage' },
+
+  // --- Kirloskar Ferrous Industries (Q4 FY26 -- Q1 FY27 not yet reported as of research date) ---
+  { id: id(), companyId: 'kirloskar-ferrous-industries-ltd', quarter: 'Q4 FY26', theme: 'Raw Material Costs', summary: 'Pig iron sales realizations declined ~6% due to weak commodity prices; an investor explicitly asked management for segment-wise EBITDA/tonne on the call, which the company has not routinely disclosed.', source: 'MarketsMojo-cited coverage' },
 ]
