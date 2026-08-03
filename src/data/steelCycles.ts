@@ -54,14 +54,15 @@ export const ironOreUsdTonne: SeriesPoint[] = [
   { label: '2016', value: 65.9 },
   { label: '2018', value: 93.0, gapBefore: true },
   { label: '2019', value: 93.85 },
-  { label: '2021', value: 158.17, gapBefore: true },
+  { label: '2020', value: 108.92 },
+  { label: '2021', value: 158.17 },
   { label: '2022', value: 120.7 },
   { label: '2023', value: 120.32 },
   { label: '2024', value: 111.06 },
   { label: '2025', value: 103.72 },
 ]
 export const ironOreNote =
-  '62% Fe CFR China, calendar-year average (World Bank Pink Sheet / FRED PIORECRUSDA). 2006-2011, 2017 and 2020 not found or unit-ambiguous in sources checked. 2015 revised between Pink Sheet vintages (57.5 vs 63 -- 63 shown here). 2019 conflicts with a second cited figure of $112.15/t, likely monthly rather than annual -- $93.85 shown as the more probable annual average.'
+  '62% Fe CFR China, calendar-year average (World Bank Pink Sheet / FRED PIORECRUSDA for most years; 2020 is USGS Mineral Commodity Summaries, a different but closely-related named source, since the World Bank/FRED figure for that year specifically wasn\'t retrievable). 2006-2011 and 2017 not found despite repeated attempts. 2015 revised between Pink Sheet vintages (57.5 vs 63 -- 63 shown here). 2019 conflicts with a second cited figure of $112.15/t, likely monthly rather than annual -- $93.85 shown as the more probable annual average. A low-confidence, blog-sourced 2010 figure (~$147/t) was found but excluded -- not a primary source.'
 
 export interface ReferencePoint {
   label: string
@@ -72,24 +73,27 @@ export interface ReferencePoint {
 export const cokingCoalReferencePoints: ReferencePoint[] = [
   { label: '2008', value: 300, note: 'Record annual contract price (widely cited)' },
   { label: '2009', value: 130, note: 'April 2009 annual contract' },
-  { label: '2019', value: 180, note: 'Approximate -- conflicting press citations of $176-186' },
+  { label: '2019', value: 186, note: 'Annual average, Australian Office of the Chief Economist' },
   { label: '2021', value: 160, note: 'Approximate -- conflicting press citations of $158-162' },
-  { label: '2022', value: 400, note: 'Peak spot price only, not a full-year average (crossed $400+/t at the peak)' },
+  { label: '2022', value: 400, note: 'Government forecast only (Sep-2022, Australian Resources & Energy Quarterly), not a confirmed realized annual average -- an earlier Mar-2022 forecast from the same publication said "over $300/t"; neither is an actual' },
+  { label: 'Dec-2025', value: 212, note: 'Monthly, not annual -- derived from an Argus fob-Australia assessment comparing it to Jan-2026' },
+  { label: 'Jan-2026', value: 227, note: 'Monthly, Argus premium low-vol fob Australia assessment' },
+  { label: 'Jun-2026', value: 244, note: 'Monthly, Argus/market assessment' },
 ]
 export const cokingCoalCaveat =
-  'No clean free tier-1 annual-average source exists for coking coal -- the World Bank Pink Sheet "Coal, Australia" series is thermal coal, not coking/metallurgical coal. These are isolated press-cited reference points, not a continuous index -- directional only. A proper series would need a paid feed (S&P Platts, Fastmarkets, Argus).'
+  'No clean free tier-1 annual-average source exists for coking coal -- the World Bank Pink Sheet "Coal, Australia" series, and the IMF PCPS "Global price of Coal, Australia" series, are both thermal coal, not coking/metallurgical coal (confirmed directly against IMF\'s own series documentation). The real benchmark (Fastmarkets MB-COA-0003, or Argus/S&P Platts equivalents) is paywalled. What\'s shown mixes annual figures (2008-2022, sparse) with a few recent monthly Argus readings (Dec-2025 onward) at their real, different granularity -- not smoothed into one cadence.'
 
 export const steelPriceReferencePoints: ReferencePoint[] = [
-  { label: '2006', value: 634, note: 'Low confidence -- source/methodology unverified' },
-  { label: '2008', value: 1113, note: 'Pre-GFC peak (28-Jul-2008)' },
-  { label: '2009', value: 651, note: 'Post-GFC -- flagged as possibly unreliable, seems high for the well-documented 2009 collapse' },
-  { label: '2015-16', value: 283, note: 'Trough (28-Dec-2015)' },
+  { label: '2008', value: 1204, note: 'Pre-GFC peak (14/28-Jul-2008, sources differ on exact date) -- AIST (aist.org) SteelBenchmarker recap; a separately-cited $1,113 figure for the same period could not be re-confirmed and is superseded by this more directly-attributed one' },
+  { label: '2009', value: 496, note: 'Post-GFC trough (9-Nov-2009) -- AIST SteelBenchmarker recap; supersedes an earlier, less-attributable $651 figure' },
+  { label: '2011', value: 773, note: '14-Feb-2011 -- AIST SteelBenchmarker recap' },
+  { label: '2016', value: 272, note: 'Cycle low (5-8-Feb-2016) -- reproduction of SteelBenchmarker\'s own history.pdf' },
   { label: '2017', value: 516, note: '13-Feb-2017 spot' },
-  { label: '2021', value: 1945, note: 'All-time high (Sep-2021 commodity supercycle peak)' },
   { label: '2022', value: 1550, note: 'Russia-Ukraine war shock peak (28-Mar-2022)' },
+  { label: '2026', value: 548, note: '29-Jul-2026, most recent reading -- current level, for context against the historical peaks/troughs' },
 ]
 export const steelPriceCaveat =
-  'World Export HRC, SteelBenchmarker (WSD/CRU) -- the right free 20-year benchmark (weekly data since Apr-2006), but its full history could not be retrieved in this environment, so what\'s shown is scattered spot/peak quotes from press citations, not clean annual averages. Still useful for the shape of the cycle: 2008 pre-GFC peak, 2009 collapse, 2015-16 anti-dumping-era trough, the 2021 all-time-high supercycle, and the 2022 war-shock spike.'
+  'World Export HRC, SteelBenchmarker (WSD/CRU) -- the right free 20-year benchmark (weekly data since Apr-2006), but its full history could not be retrieved in this environment, so what\'s shown is scattered spot/peak quotes from press citations, not clean annual averages. A widely-repeated "$1,945/t, Sep-2021, all-time high" figure is deliberately excluded here: it could not be confirmed to actually be the SteelBenchmarker World Export series (more likely a different US-domestic HRC benchmark in different units/geography) -- misattributing it would be worse than leaving 2021 blank. Still useful for the shape of the cycle: 2008 pre-GFC peak, 2009 collapse, 2011 rebound, 2016 trough, and the 2022 war-shock spike, against today\'s $548/t.'
 
 export const ebitdaPerTonneReferencePoints: (ReferencePoint & { fullYear: boolean })[] = [
   { label: 'FY16 Q4', value: 7959, note: 'Quarterly -- anti-dumping-era trough', fullYear: false },

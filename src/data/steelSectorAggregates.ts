@@ -9,24 +9,25 @@ import type { SteelProductionPoint, SteelPriceBenchmarks, TradePolicyEvent } fro
 // explicitly rather than presented as a hard number.
 
 export const steelProduction: SteelProductionPoint[] = [
-  {
-    month: 'Jun-2026',
-    crudeSteelProductionMt: 14.1,
-    productionGrowthYoyPct: 4.5,
-    source: 'worldsteel.org, "June 2026 crude steel production" press release (India #2 global producer behind China)',
-  },
-  {
-    month: 'May-2026',
-    crudeSteelProductionMt: 14.21,
-    productionGrowthYoyPct: 2.9,
-    source: 'worldsteel.org monthly crude steel production data',
-  },
+  { month: 'Jun-2025', crudeSteelProductionMt: 13.6, productionGrowthYoyPct: 13.3, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Jul-2025', crudeSteelProductionMt: 14.0, productionGrowthYoyPct: 14.0, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Aug-2025', crudeSteelProductionMt: 14.1, productionGrowthYoyPct: 13.2, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Sep-2025', crudeSteelProductionMt: 13.6, productionGrowthYoyPct: 13.2, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Oct-2025', crudeSteelProductionMt: 13.6, productionGrowthYoyPct: 5.9, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Nov-2025', crudeSteelProductionMt: 13.7, productionGrowthYoyPct: 10.8, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Dec-2025', crudeSteelProductionMt: 14.8, productionGrowthYoyPct: 10.1, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Jan-2026', crudeSteelProductionMt: 15.1, productionGrowthYoyPct: 10.5, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Feb-2026', crudeSteelProductionMt: 13.6, productionGrowthYoyPct: 7.7, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Mar-2026', crudeSteelProductionMt: 15.3, productionGrowthYoyPct: 9.4, source: 'worldsteel.org monthly crude steel production release' },
   {
     month: 'Apr-2026',
-    crudeSteelProductionMt: 14.09,
-    productionGrowthYoyPct: 5.8,
-    source: 'PIB (Press Information Bureau, Govt of India), "Indian Steel Sector Maintains Growth Momentum in April 2026" release, 5-May-2026',
+    crudeSteelProductionMt: 13.8,
+    productionGrowthYoyPct: 3.9,
+    source:
+      'worldsteel.org monthly crude steel production release. A separate PIB (Press Information Bureau, Govt of India) release for the same month states 14.09 Mt (+5.8% YoY) -- likely a methodology/scope difference between the two sources (worldsteel\'s country panel vs India\'s own reporting), not a data error; worldsteel figure used here for consistency with the rest of this series and the World/China comparison below.',
   },
+  { month: 'May-2026', crudeSteelProductionMt: 14.1, productionGrowthYoyPct: 1.9, source: 'worldsteel.org monthly crude steel production release' },
+  { month: 'Jun-2026', crudeSteelProductionMt: 14.1, productionGrowthYoyPct: 4.5, source: 'worldsteel.org, "June 2026 crude steel production" press release (India #2 global producer behind China)' },
 ]
 
 export const steelH1Fy26ProductionNote =

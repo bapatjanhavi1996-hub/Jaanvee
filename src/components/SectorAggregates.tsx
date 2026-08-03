@@ -16,6 +16,13 @@ import {
   ebitdaPerTonneReferencePoints,
   ebitdaPerTonneCaveat,
 } from '../data/steelCycles'
+import {
+  worldSteelProductionMonthly,
+  chinaSteelProductionMonthly,
+  worldProductionSource,
+  otherProducersLatest,
+  globalCapacityFacts,
+} from '../data/globalSteelMarket'
 import { MiniLineChart } from './MiniLineChart'
 
 interface SectorAggregatesProps {
@@ -256,7 +263,7 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {steelProduction.slice().reverse().map((p) => (
+                  {steelProduction.map((p) => (
                     <tr key={p.month} className="border-t border-zinc-100 dark:border-zinc-800">
                       <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{p.month}</td>
                       <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
@@ -274,6 +281,76 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
             <div className="mt-1 space-y-0.5">
               {Array.from(new Set(steelProduction.map((p) => p.source))).map((s) => (
                 <p key={s} className="text-xs text-zinc-400 dark:text-zinc-500">{s}</p>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Global Steel Market
+            </h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+              India in global context. Production is monthly (worldsteel's real publishing cadence);
+              capacity below is annual at best, since that's genuinely all that's published — shown
+              as a reference panel rather than forced into a fake monthly series.
+            </p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+              <div>
+                <MiniLineChart title="World Crude Steel Production" unit="Mt, monthly" points={worldSteelProductionMonthly} format={(v) => `${v} Mt`} />
+              </div>
+              <div>
+                <MiniLineChart title="China Crude Steel Production" unit="Mt, monthly" points={chinaSteelProductionMonthly} format={(v) => `${v} Mt`} color="#eb6834" />
+              </div>
+            </div>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4">{worldProductionSource}</p>
+
+            <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              Other Major Producers — Latest Available Reading
+            </p>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800 mb-4">
+              <table className="w-full text-sm">
+                <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <tr>
+                    <th className="px-4 py-2 font-medium">Country</th>
+                    <th className="px-4 py-2 font-medium">Month</th>
+                    <th className="px-4 py-2 font-medium text-right">Production</th>
+                    <th className="px-4 py-2 font-medium text-right">YoY</th>
+                    <th className="px-4 py-2 font-medium">Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {otherProducersLatest.map((p) => (
+                    <tr key={p.country} className="border-t border-zinc-100 dark:border-zinc-800">
+                      <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{p.country}</td>
+                      <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400 whitespace-nowrap">{p.month}</td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">{p.productionMt} Mt</td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
+                        {p.yoyPct >= 0 ? '+' : ''}{p.yoyPct}%
+                      </td>
+                      <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">{p.note ?? '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4">
+              Most producers beyond India/China/World only had one or two months surface in this
+              research pass — shown as the latest single-month reading rather than a mostly-empty
+              chart. A fuller country×month matrix exists in worldsteel's monthly PDF releases, not
+              extractable in this environment.
+            </p>
+
+            <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-2">Global Steel Capacity</p>
+            <div className="space-y-3">
+              {globalCapacityFacts.map((f) => (
+                <div key={f.label} className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-3">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <p className="text-sm text-zinc-900 dark:text-zinc-100">{f.label}</p>
+                    <p className="text-sm font-medium tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{f.value}</p>
+                  </div>
+                  <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">As of {f.asOf}</p>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{f.source}</p>
+                </div>
               ))}
             </div>
           </section>
