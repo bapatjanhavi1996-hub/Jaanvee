@@ -458,4 +458,282 @@ export const steelMetrics: Record<string, SteelMetricQuarter[]> = {
         'Q1 FY27 results not yet released as of research date -- board meeting scheduled 5-Aug-2026. Pig iron volume shown (Koppal plant, +5% QoQ, -6% YoY); a separate auto-grade castings line despatched ~38kt (+20% YoY, a slightly different "despatches" measure from the 34,980 MT "sales" figure found in the first pass -- likely not a true conflict, just a different metric) at ₹1,31,790/tonne realization; a tube-making line also despatched ~51.1kt (-1% YoY), not previously captured. Per-tonne EBITDA for pig iron specifically was not disclosed even after a deeper pass -- one investor explicitly asked management for segment-wise EBITDA/tonne on a call, implying the company doesn\'t routinely disclose it. Net debt/EBITDA remains a genuine cross-source conflict: 1.60x vs 1.23x both appear to originate from the same underlying coverage (MarketsMojo) without a clear reconciliation; 2.88x was also found for both Q2 FY26 and Q3 FY26 identically, which may be a search-synthesis artifact rather than two independently confirmed values -- none of the H1/Q2/Q3 figures are used here pending clarification, only the Q4 FY26 figure is shown.',
     },
   ],
+
+  // ---- Second expansion batch (15 companies, research date 2026-08-03) ----
+
+  'lloyds-metals-energy-ltd': [
+    {
+      period: 'Jun-2026',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Predominantly an iron ore/pellet/DRI producer expanding into steel capacity (see company note) -- does not publish a single blended steel volume/realization/EBITDA-per-tonne figure. Q1 FY27 production only: iron ore 6.05 Mt (+53% YoY), pellets 1.7 Mt (2nd pellet plant now live, 8 MTPA total capacity), DRI/sponge iron 182,000t (+131% YoY, new kilns). FY26 standalone EBITDA margin 33.77%. A secondary, unverified reference to "~₹1,900/t iron ore EBITDA" for Q4 FY26 could not be confirmed against a primary transcript and is excluded. Capacity utilization % and net debt/EBITDA not found. Sources: Tradebrains, InvestyWise, Prysm.fi.',
+    },
+  ],
+
+  'gallantt-ispat-ltd': [
+    {
+      period: 'Jun-2026',
+      salesVolumeTonnes: 196200,
+      realizationPerTonne: null,
+      ebitdaPerTonne: 8787,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'TMT bar volume shown (-0.15% YoY); sponge iron (236,400t, +2% YoY) and pellet (112,300t, -36% YoY on maintenance shutdown) volumes not combined into this figure since they are separate product lines. EBITDA/tonne -21% YoY (vs ₹11,068/t Q1 FY26) on the pellet-plant shutdown. Company states a net-cash, zero-term-debt position. Sources: TipRanks, Whalesbook.',
+    },
+    {
+      period: 'Mar-2026',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: 91,
+      netDebtToEbitda: null,
+      source: 'Capacity utilization 91% this quarter (86% FY26 full-year average). FY26 full-year EBITDA/tonne ₹8,784.7/t (vs ₹8,308.2/t FY25) -- not shown as a quarter-specific figure since it\'s an annual average. Source: InvestyWise.',
+    },
+    {
+      period: 'Jun-2025',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: 11068,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source: 'Cited as the YoY comparison base for the Jun-2026 figure. Source: HDFC Sky.',
+    },
+  ],
+
+  'nmdc-steel-ltd': [
+    {
+      period: 'Mar-2026',
+      salesVolumeTonnes: 703492,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: 80,
+      netDebtToEbitda: null,
+      source:
+        'Demerged from NMDC Ltd. in 2022 to run the Nagarnar integrated steel plant -- distinct from NMDC Ltd. (iron ore miner, listed separately). Capacity utilization ~80% average, described as achieved within 2 years of commissioning (FY26-end context, not necessarily this exact quarter). A per-tonne EBITDA/realization figure found in search ("₹1,193/t EBITDA, ₹3,821/t realization") is excluded here -- context strongly suggests it actually describes NMDC Ltd. (the parent iron ore miner), not NMDC Steel, and misattributing it would be worse than leaving it blank. Net debt ₹4,602cr (absolute, no EBITDA denominator confirmed for a multiple). FY26 full-year: production 23.25 lakh MT (+62% YoY), sales 24.55 lakh MT (+74% YoY) -- first profitable full year. Sources: IndianMasterminds, Business Standard.',
+    },
+  ],
+
+  'vedanta-iron-and-steel-ltd': [
+    {
+      period: 'Jun-2026',
+      salesVolumeTonnes: 582000,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: 1.3,
+      source:
+        'Debut quarter as a standalone listed entity -- demerged from Vedanta Ltd. and listed 15-Jun-2026. This is a multi-site integrated iron ore + steel group (Goa, Odisha, Bokaro/ESL, plus Liberia iron ore via Western Cluster Ltd.), not a single-plant peer, so no pre-Q1FY27 standalone quarterly trend exists. Steel saleable production shown (+4% YoY); a separately-cited pig iron volume conflicts across sources (291kt vs 238kt, possibly different scopes) and is excluded. Net debt/EBITDA 1.3x is company-stated. Realization/tonne and EBITDA/tonne not found. Sources: Business Standard, Investing.com, EquityBulls.',
+    },
+  ],
+
+  'jayaswal-neco-industries-ltd': [
+    {
+      period: 'Jun-2026',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Researched but not found: no source discloses sales/production volume in tonnes, realization/tonne, EBITDA/tonne or capacity utilization for this company -- it reports revenue by segment name (Billets, Pellet, Castings, Sponge Iron, Pig Iron, Iron Ore, Job Work) in ₹ only, not tonnage. A genuine company-disclosure gap. Q1 FY27 context: record revenue ₹2,106.56cr (+27.72% YoY), EBITDA ₹395.61cr (margin 18.78%), PAT ₹193.92cr (+108.5% YoY). Sources: MarketsMojo, EquityBulls, Sahi.',
+    },
+  ],
+
+  'maharashtra-seamless-ltd': [
+    {
+      period: 'Dec-2025',
+      salesVolumeTonnes: 101000,
+      realizationPerTonne: null,
+      ebitdaPerTonne: 12074,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Seamless pipes segment shown (the larger, higher-margin of two product lines) -- ERW pipes are a separate, lower-margin segment (EBITDA/tonne ₹3,684/t, sold 21kt this quarter), not combined here. Company is debt-free/net cash (long-term debt ~₹0.10cr, net debt/equity negative per simplywall.st) -- net debt/EBITDA not meaningful. Q1 FY27 not yet reported as of research date -- board meeting confirmed 7-Aug-2026. Several other-quarter PAT/revenue figures found conflict across sources by scope (standalone vs consolidated) and are not used here. Sources: Prysm.fi (Q3 FY26 investor presentation), MarketsMojo.',
+    },
+  ],
+
+  'mishra-dhatu-nigam-ltd': [
+    {
+      period: 'Mar-2026',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Researched but not found: this defence PSU (aerospace/specialty alloy producer -- titanium alloys, superalloys, steels) does not disclose tonnage, realization/tonne, EBITDA/tonne or capacity utilization anywhere found -- consistent with a highly diversified alloy mix where a single blended tonnage metric wouldn\'t be meaningful. Record quarter: revenue ₹552.75cr (+34.63% YoY), EBITDA ₹117cr (margin 21%), PAT ₹78cr (+39% YoY); order book ₹2,290cr. Q1 FY27 not yet reported as of research date. Sources: IndianMasterminds, FreePressJournal, MarketsMojo.',
+    },
+  ],
+
+  'sunflag-iron-and-steel-company-ltd': [
+    {
+      period: 'Mar-2026',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Researched but not found: no EBITDA figure (₹ crore or per-tonne), sales/production volume, or capacity utilization found for this company in any quarter -- only revenue and PAT are disclosed in accessible sources. A notable disclosure gap relative to peers; may require the company\'s own investor-presentation PDF (blocked, 403) to fill. This quarter: revenue ₹1,003.99cr (+13.29% YoY), PAT ₹34.27cr (-20.74% YoY), net debt ₹245cr (down from ₹254cr a year earlier). Q1 FY27 not yet reported as of research date. Source: Kotak Neo, simplywall.st.',
+    },
+  ],
+
+  'technocraft-industries-india-ltd': [
+    {
+      period: 'Mar-2026',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Diversified (steel drums/barrels, scaffolding, textiles) -- the Drum Closures (steel) division discloses only segment revenue in ₹, not tonnage or per-unit economics. FY26 Drum Closures revenue ₹636.26cr (FY25: ₹617.66cr); company-wide FY26 revenue ~₹2,400cr, PAT ₹293.08cr (+11.5% YoY). Source: Screener.in-derived press coverage, MarketsMojo.',
+    },
+  ],
+
+  'jai-balaji-industries-ltd': [
+    {
+      period: 'Sep-2025',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Reports as a single "Iron and Steel" segment -- no sales volume, realization/tonne, EBITDA/tonne or capacity utilization found by product (pig iron/sponge iron/ferro alloys) for any quarter. Net profit fell 82.71% YoY to ₹26.48cr this quarter amid margin compression (FY26 full year: revenue ₹5,784.27cr -8.9% YoY, PAT ₹129.95cr -76.7% YoY). A third-party (not company-disclosed) net debt/EBITDA estimate exists but conflicts across sources (0.77x vs 0.62x) and is not used here. Sources: MarketsMojo, Kotak Securities, Simply Wall St.',
+    },
+  ],
+
+  'aeroflex-industries-ltd': [
+    {
+      period: 'Jun-2026',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Flexible metal hoses -- output is measured in meters (17.5 million meters/annum installed capacity) and skid-assembly units, not tonnes, so this company\'s metrics genuinely don\'t map to a tonnage/₹-per-tonne schema. Q1 FY27: net sales ₹145.38cr (+72.39% YoY), standalone EBITDA margin 23.76% (up from 18.37% YoY), net cash -₹68.58cr as of Mar-2026 (i.e. net cash, growing from -₹52.85cr a year earlier) -- not a net-debt position. Source: MarketsMojo, Prysm.fi.',
+    },
+  ],
+
+  'moil-ltd': [
+    {
+      period: 'Jun-2026',
+      salesVolumeTonnes: 369049,
+      realizationPerTonne: 9749,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Manganese ore miner, not a steel producer -- included as a raw-material play alongside NMDC; volume/₹-per-tonne here refer to manganese ore, not steel. Dispatch +4% YoY, realization +10% YoY. Production 507,605t (+1% YoY). Zero-debt company -- net debt/EBITDA not meaningful. EBITDA/tonne and capacity utilization % not found. Sources: EquityBulls, ScanX.',
+    },
+    {
+      period: 'Jun-2025',
+      salesVolumeTonnes: 356196,
+      realizationPerTonne: 8884,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source: 'Cited as the YoY comparison base for the Jun-2026 quarter figures.',
+    },
+  ],
+
+  'surya-roshni-ltd': [
+    {
+      period: 'Mar-2026',
+      salesVolumeTonnes: 260000,
+      realizationPerTonne: null,
+      ebitdaPerTonne: 5121,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Steel pipes segment of this dual-segment company (the other segment is lighting/consumer durables) -- highest-ever quarterly volume. Segment EBITDA for this quarter has an unresolved conflict across sources (₹126cr vs ₹170cr, possibly different scope/basis); the ₹5,121/t figure is the directly-stated per-tonne number, not self-calculated from either total. Company is net-cash (~₹340cr as of Mar-2026) -- net debt/EBITDA not meaningful. Sources: MarketsMojo, InvestyWise.',
+    },
+    {
+      period: 'Dec-2025',
+      salesVolumeTonnes: 237000,
+      realizationPerTonne: null,
+      ebitdaPerTonne: 4810,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source: 'Included a ~₹500/tonne one-time inventory loss from a steel-price correction during the quarter. Source: MarketsMojo.',
+    },
+  ],
+
+  'goodluck-india-ltd': [
+    {
+      period: 'Jun-2025',
+      salesVolumeTonnes: 112741,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source: 'Volume +11.6% YoY. Realization/EBITDA-per-tonne not found for any current quarter (only a stale FY22 EBITDA/tonne data point exists, excluded as superseded). Q1 FY27 not yet reported as of research date -- board meeting scheduled 6-Aug-2026.',
+    },
+    {
+      period: 'Mar-2026',
+      salesVolumeTonnes: null,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: 92,
+      netDebtToEbitda: 2.91,
+      source:
+        'Capacity utilization 92% is a 9M FY26 figure (up from 89% FY25), not quarter-specific -- shown here at FY26 year-end for reference. Installed capacity expanded from 364,000t (FY23) to 500,000t (FY25/26); 57% of that is high-margin value-added capacity. Net debt/EBITDA 2.91x is a FY26 annual figure (third-party research note, not a primary company disclosure). Source: BOB Capital Markets research note (via press coverage), Tradebrains.',
+    },
+  ],
+
+  'bansal-wire-industries-ltd': [
+    {
+      period: 'Jun-2026',
+      salesVolumeTonnes: 111962,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source:
+        'Volume +7.6% YoY. Company reports EBITDA per **kilogram**, not per tonne -- this quarter it compressed from ₹7/kg to ₹2/kg intra-quarter on a gas-supply disruption (geopolitical), with management guiding recovery to ₹7-8/kg in H2, so no single representative figure for the quarter is shown. Sources: Investing.com (Q1 FY27 slides and transcript).',
+    },
+    {
+      period: 'Mar-2026',
+      salesVolumeTonnes: 117644,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: 1.68,
+      source: 'Volume +20.16% YoY, highest-ever quarterly revenue. Net debt/EBITDA 1.68x is a FY26 annual figure (improved from 2.18x FY25). EBITDA/kg not disclosed for this specific quarter. Sources: EquityBulls, MarketsMojo.',
+    },
+    {
+      period: 'Dec-2025',
+      salesVolumeTonnes: 121702,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source: 'Highest-ever quarterly volume at the time (+31.7% YoY). Source: MarketsMojo.',
+    },
+    {
+      period: 'Sep-2025',
+      salesVolumeTonnes: 114609,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source: '+6.18% QoQ. Source: MarketsMojo.',
+    },
+    {
+      period: 'Jun-2025',
+      salesVolumeTonnes: 104050,
+      realizationPerTonne: null,
+      ebitdaPerTonne: null,
+      capacityUtilization: null,
+      netDebtToEbitda: null,
+      source: 'Cited as the YoY comparison base for the Jun-2026 volume figure. A self-calculated EBITDA/kg figure (₹7.15/kg, from dividing disclosed EBITDA by volume) was found for this quarter but is excluded per this dashboard\'s no-estimate rule -- not company-stated.',
+    },
+  ],
 }
