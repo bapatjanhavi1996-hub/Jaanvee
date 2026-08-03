@@ -144,4 +144,18 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'DGTR injury finding; Govt notification 31-Dec-2025',
     impact: 'Positive',
   },
+
+  // --- Daily trigger check additions ---
+  {
+    id: 'log-2026-muthoot-q1fy27',
+    date: '2026-08-01',
+    sectorId: 'nbfc',
+    triggerId: 'nbfc-quarterly-results',
+    companyIds: ['muthoot-finance-ltd'],
+    headline: 'Muthoot Finance Q1 FY27 profit jumps 43% as gold-loan AUM surges on record gold prices',
+    detail:
+      'Consolidated PAT rose 43% YoY to ₹2,824.84 Cr (standalone PAT ₹2,550 Cr, +25% YoY) on consolidated loan AUM of ₹1,91,532 Cr (+43% YoY, from ₹1,33,938 Cr a year earlier). Gold loan AUM specifically grew 48% YoY to ₹56,767 Cr, reflecting the tailwind from this year\'s gold-price rally. Board also recommended a dividend and approved a leadership transition (Alexander George as MD, George Alexander Muthoot as Executive Vice Chairman, effective 1-Oct-2026).',
+    source: 'Business Upturn, FreePressJournal, Whalesbook, Sahi -- Q1 FY27 results, 1-Aug-2026',
+    impact: 'Positive',
+  },
 ]
