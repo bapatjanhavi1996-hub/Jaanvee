@@ -87,6 +87,12 @@ export type CommentaryTheme =
   | 'NIM / Margins'
   | 'Cost of Borrowings'
   | 'Opex Efficiency'
+  | 'Realization / Pricing'
+  | 'Raw Material Costs'
+  | 'Capacity Utilization & Expansion'
+  | 'Demand Outlook'
+  | 'Trade Policy Impact'
+  | 'Balance Sheet / Leverage'
 
 export interface ManagementCommentary {
   id: string

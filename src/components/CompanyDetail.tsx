@@ -128,6 +128,12 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
     'NIM / Margins',
     'Cost of Borrowings',
     'Opex Efficiency',
+    'Realization / Pricing',
+    'Raw Material Costs',
+    'Capacity Utilization & Expansion',
+    'Demand Outlook',
+    'Trade Policy Impact',
+    'Balance Sheet / Leverage',
   ]
 
   return (
