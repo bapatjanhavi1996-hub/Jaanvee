@@ -158,4 +158,16 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'Business Upturn, FreePressJournal, Whalesbook, Sahi -- Q1 FY27 results, 1-Aug-2026',
     impact: 'Positive',
   },
+  {
+    id: 'log-2026-utkarsh-sfb-q1fy27',
+    date: '2026-08-01',
+    sectorId: 'banks',
+    triggerId: 'bank-asset-quality',
+    companyIds: ['utkarsh-small-finance-bank-ltd'],
+    headline: 'Utkarsh SFB narrows Q1 FY27 loss over 80% as credit costs ease sharply',
+    detail:
+      'Net loss narrowed to ₹34 Cr (down more than 80% YoY and QoQ) as operating profit recovered to ₹64 Cr (from ₹12 Cr in Q4 FY26 and -₹44 Cr in Q3 FY26). Credit cost fell to 2.3%, down sharply from 5.3% in Q4 FY26 and 8.5% in Q1 FY26 -- signaling the (largely microfinance-linked) asset-quality stress cycle at the bank is easing, though it remains loss-making.',
+    source: 'Business Standard, Investing.com earnings call transcript, ScanX -- Q1 FY27 results, 1-Aug-2026',
+    impact: 'Positive',
+  },
 ]
