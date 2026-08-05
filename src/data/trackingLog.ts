@@ -170,4 +170,16 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'Business Standard, Investing.com earnings call transcript, ScanX -- Q1 FY27 results, 1-Aug-2026',
     impact: 'Positive',
   },
+  {
+    id: 'log-2026-08-mpc',
+    date: '2026-08-05',
+    sectorId: 'banks',
+    triggerId: 'bank-monetary-policy',
+    companyIds: [],
+    headline: 'RBI MPC holds repo rate at 5.25% for a fourth straight meeting, retains neutral stance',
+    detail:
+      'Governor Sanjay Malhotra said the MPC wanted "greater clarity" on the inflation outlook before acting -- headline inflation has moved above the 4% target, but he attributed this mainly to food and fuel prices with "little signs of generalisation" of price pressure so far. SDF held at 5%, MSF/Bank Rate at 5.5%. Flagged risks: renewed West Asia tensions, volatile crude oil, an uneven monsoon under El Nino conditions, and global trade uncertainty.',
+    source: 'Business Standard, Forbes India -- RBI MPC resolution, 5-Aug-2026',
+    impact: 'Neutral',
+  },
 ]
