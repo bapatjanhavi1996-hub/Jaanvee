@@ -182,4 +182,16 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'Business Standard, Forbes India -- RBI MPC resolution, 5-Aug-2026',
     impact: 'Neutral',
   },
+  {
+    id: 'log-2026-gold-rally-early-aug',
+    date: '2026-08-06',
+    sectorId: 'nbfc',
+    triggerId: 'nbfc-segment-cycles',
+    companyIds: ['muthoot-finance-ltd', 'manappuram-finance-ltd'],
+    headline: 'Gold prices surge 3.8% in under a week to near-record ₹1,49,750/10g',
+    detail:
+      '24K gold rose from ₹14,422/gram on 1-Aug to ₹14,973/gram on 6-Aug (+3.82%), with Comex gold up 0.61% to $4,331.30/oz on renewed hopes of a US rate cut. Rising gold collateral values directly expand loan-against-gold headroom and typically support AUM growth for gold-loan-heavy NBFCs -- the same dynamic already visible in Muthoot Finance\'s Q1 FY27 results (gold loan AUM +48% YoY, logged 1-Aug).',
+    source: 'Startuptalky, FXStreet, Sunday Guardian Live -- gold price data, 6-Aug-2026',
+    impact: 'Positive',
+  },
 ]
