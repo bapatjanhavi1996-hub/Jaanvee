@@ -194,4 +194,16 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'Startuptalky, FXStreet, Sunday Guardian Live -- gold price data, 6-Aug-2026',
     impact: 'Positive',
   },
+  {
+    id: 'log-2026-rbi-nbfc-revolving-credit-draft',
+    date: '2026-08-06',
+    sectorId: 'nbfc',
+    triggerId: 'nbfc-regulatory-action',
+    companyIds: ['bajaj-finance-ltd'],
+    headline: 'RBI draft norms would bar most NBFCs from offering revolving credit, restrict them to term loans',
+    detail:
+      'Draft amendments to the RBI\'s Credit Facilities Directions for NBFCs propose that NBFCs may only extend credit in the form of term loans and must discontinue revolving credit products, with an exemption only for NBFCs authorised to issue credit cards. Comments open until 28-Aug-2026; if notified as-is, the change takes effect immediately. Flexi-loan/revolving products are estimated by IIFL to be ~15% of Bajaj Finance\'s AUM, and the stock fell 5.84% to ₹1,078 on 7-Aug as Financial Services was the weakest Nifty sector (-1.48%) and Bank Nifty slid 317 points (-0.55%) to 57,746.45.',
+    source: 'Business Standard, BusinessToday, IndMoney -- RBI draft Credit Facilities Directions amendment, 6/7-Aug-2026',
+    impact: 'Negative',
+  },
 ]
