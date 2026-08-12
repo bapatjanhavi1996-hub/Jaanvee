@@ -206,4 +206,16 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'Business Standard, BusinessToday, IndMoney -- RBI draft Credit Facilities Directions amendment, 6/7-Aug-2026',
     impact: 'Negative',
   },
+  {
+    id: 'log-2026-gold-fresh-record-mid-aug',
+    date: '2026-08-12',
+    sectorId: 'nbfc',
+    triggerId: 'nbfc-segment-cycles',
+    companyIds: ['muthoot-finance-ltd', 'manappuram-finance-ltd'],
+    headline: 'Gold extends rally to fresh record highs, up another 3.4% since 6-Aug on renewed Fed rate-cut bets',
+    detail:
+      '24K gold in India rose from ₹14,973/gram on 6-Aug to ₹15,486/gram on 12-Aug (+3.4%, ₹1,54,860/10g), pushing further into record territory. The move tracks a global gold breakout -- COMEX/international spot hit a fresh high near $4,384/oz -- driven by renewed optimism the US Fed will keep cutting rates after weaker US labour-market and inflation data, plus continued central-bank buying. Rising collateral values keep expanding loan-against-gold headroom for gold-loan NBFCs, extending the AUM tailwind already flagged in Muthoot\'s Q1 FY27 results and the 6-Aug rally entry.',
+    source: 'HDFC Sky, FXStreet, Gulf News -- gold price data, 12-Aug-2026',
+    impact: 'Positive',
+  },
 ]
