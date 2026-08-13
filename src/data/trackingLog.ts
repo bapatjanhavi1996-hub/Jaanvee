@@ -218,4 +218,21 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'HDFC Sky, FXStreet, Gulf News -- gold price data, 12-Aug-2026',
     impact: 'Positive',
   },
+  {
+    id: 'log-2026-siam-july-pv-record',
+    date: '2026-08-13',
+    sectorId: 'nbfc',
+    triggerId: 'nbfc-segment-cycles',
+    companyIds: [
+      'shriram-finance-ltd',
+      'cholamandalam-investment-and-finance-company-ltd',
+      'mahindra-mahindra-financial-services-ltd',
+      'sundaram-finance-ltd',
+    ],
+    headline: 'SIAM: domestic PV dispatches hit an all-time-high July, up 34.3% YoY to 4,57,810 units',
+    detail:
+      'Society of Indian Automobile Manufacturers data released 13-Aug-2026 showed passenger vehicle dispatches from companies to dealers rose 34.3% YoY in July (from 3,40,772 units in July 2025) -- the strongest-ever July on record. SIAM attributed the jump to festive-season restocking, with two-wheelers and three-wheelers also posting double-digit growth and two-wheeler exports up 28%. Stronger wholesale volumes typically feed through to higher vehicle-finance disbursement volumes for NBFCs with vehicle-loan books.',
+    source: 'Business Standard, The Tribune, ANI -- SIAM data release, 13-Aug-2026',
+    impact: 'Positive',
+  },
 ]
