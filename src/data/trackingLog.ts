@@ -235,4 +235,16 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'Business Standard, The Tribune, ANI -- SIAM data release, 13-Aug-2026',
     impact: 'Positive',
   },
+  {
+    id: 'log-2026-psb-qip-govt-stake',
+    date: '2026-08-16',
+    sectorId: 'banks',
+    triggerId: 'bank-capital-raising',
+    companyIds: ['punjab-sind-bank'],
+    headline: 'Punjab & Sind Bank moves to cut government stake via QIP, onboards merchant bankers',
+    detail:
+      'MD & CEO Swarup Kumar Saha said the bank has board approval to raise funds via QIP and other routes to bring down the Government of India\'s 93.85% holding -- the highest of any PSU bank -- in a phased manner, and has now onboarded merchant bankers and legal advisors. The move is aimed at meeting SEBI\'s 25% minimum public shareholding norm; the special dispensation deadline for PSU banks/CPSEs is due to lapse in 2026, though a further extension is widely expected since several government-held lenders remain far short of the threshold.',
+    source: 'Business Standard, Daily Pioneer -- MD Saha comments, 16-Aug-2026',
+    impact: 'Watch',
+  },
 ]
