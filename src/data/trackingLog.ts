@@ -247,4 +247,16 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'Business Standard, Daily Pioneer -- MD Saha comments, 16-Aug-2026',
     impact: 'Watch',
   },
+  {
+    id: 'log-2026-gold-two-month-high-treasury-buyback',
+    date: '2026-08-20',
+    sectorId: 'nbfc',
+    triggerId: 'nbfc-segment-cycles',
+    companyIds: ['muthoot-finance-ltd', 'manappuram-finance-ltd'],
+    headline: 'Gold jumps to a fresh 2-month high on US Treasury buyback move; Muthoot, Manappuram rally up to 5%',
+    detail:
+      '24K gold in India jumped roughly ₹4,300/10g to around ₹1,58,000-1,59,000/10g (~₹15,800-15,900/gram), and international spot touched near $4,527/oz -- a two-month high -- after the US Treasury Department doubled the size of its 10-to-30-year bond buyback operations, softening long-term yields and weakening the dollar. Soft US jobs, CPI and PPI prints through the week had already shifted rate-cut expectations, and Middle East tensions added safe-haven demand. Gold financiers rallied directly on the news: Muthoot Finance rose as much as 4.1% to ~₹2,977 and Manappuram Finance gained close to 2-5%, as higher collateral values support larger loan disbursals.',
+    source: 'Business Standard, Sunday Guardian Live, Free Press Journal, TradingView/Moneycontrol -- gold price and stock reaction, 20-Aug-2026',
+    impact: 'Positive',
+  },
 ]
