@@ -259,4 +259,16 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'Business Standard, Sunday Guardian Live, Free Press Journal, TradingView/Moneycontrol -- gold price and stock reaction, 20-Aug-2026',
     impact: 'Positive',
   },
+  {
+    id: 'log-2026-bofa-jio-credit-stake',
+    date: '2026-08-12',
+    sectorId: 'nbfc',
+    triggerId: 'nbfc-capital-raising',
+    companyIds: ['jio-financial-services-ltd'],
+    headline: 'Bank of America to invest up to $1.92bn for a 49.9% stake in Jio Financial\'s NBFC arm, Jio Credit',
+    detail:
+      'BofA and Jio Financial Services signed a joint-venture agreement under which BofA will initially acquire a 26.5% stake in Jio Credit Limited for ~₹6,613 Cr via preferential allotment of equity, plus 7.6 Cr warrants worth up to ~₹11,655 Cr convertible within 18 months (taking the stake to 49.9% if fully exercised). The deal values Jio Credit at roughly $3.8bn; Jio Credit\'s AUM has crossed $3bn within just two years of operations. This is a large, unlogged capital infusion into the NBFC arm of a company in the tracked universe -- caught in this run after being missed on the day it broke (12-Aug).',
+    source: 'Bank of America newsroom press release, CNBC, MediaNama -- deal announcement, 12-Aug-2026',
+    impact: 'Positive',
+  },
 ]
