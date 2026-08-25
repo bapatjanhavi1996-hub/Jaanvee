@@ -469,4 +469,89 @@ export const triggers: Trigger[] = [
     typicalSource: 'Ministry of Steel notifications, company PLI investment updates',
     frequency: 'Event-driven',
   },
+  {
+    id: 'cement-capacity-utilization-glut',
+    sectorId: 'cement',
+    category: 'Fundamentals',
+    name: 'National Capacity Utilization & Supply Glut',
+    description:
+      'Cement is capital-intensive with a multi-year brownfield capacity-addition cycle; India added 160-170 MT of new capacity FY26-28 against 30-40 MT/yr incremental demand, creating an estimated 50-70 MT surplus that pan-India utilization (65-70% vs an 80-85% optimal) has to absorb.',
+    whyItMatters:
+      'Because the surplus is genuinely new brownfield capacity (not idled/reactivated latent capacity), it will run rather than be mothballed -- utilization and EBITDA/tonne stay structurally pressured until demand growth (30-40 MT/yr) closes the gap, likely around FY29, not on any single dateable event.',
+    watchFor: [
+      'Pan-India capacity utilization % crossing 70-75% (CareEdge\'s threshold for sustained price hikes)',
+      'Quarterly EBITDA/tonne across the cluster vs the Rs 1,005/tonne floor reference (Q1 FY27)',
+      'Any capex deferral announcements -- the first real sign the cycle is turning',
+    ],
+    typicalSource: 'CRISIL Ratings, CareEdge, Axis Securities, Jefferies sector notes; company investor presentations',
+    frequency: 'Quarterly',
+  },
+  {
+    id: 'cement-consolidation-ma',
+    sectorId: 'cement',
+    category: 'Corporate Action',
+    name: 'M&A / Consolidation & Capacity Targets',
+    description:
+      'Large players (UltraTech, Ambuja/Adani, Dalmia Bharat) are acquiring capacity from mid/small-cap peers (Kesoram, India Cements, Penna, Orient, Sanghi, Jaiprakash Associates) on top of organic brownfield expansion -- company-level capacity targets sum to more than the national addition because of this double-count.',
+    whyItMatters:
+      'Consolidation did not create pricing discipline -- it triggered a capacity arms race; treat named acquisitions as ownership transfer against the national CRISIL capacity figure, not as incremental national tonnes, when assessing whether a company target implies sector-wide oversupply easing.',
+    watchFor: [
+      'New acquisition announcements and completion/amalgamation dates (e.g. ACC into Ambuja, NCLT meeting 29-Sep-2026)',
+      'Utilization of recently acquired assets specifically (lags group average -- e.g. Sanghi 57%, Penna 46% at FY26-end)',
+      'Company capacity-target revisions vs the CRISIL national reconciliation',
+    ],
+    typicalSource: 'Company merger/amalgamation filings, NCLT/CCI/SEBI approvals, investor presentations',
+    frequency: 'Event-driven',
+  },
+  {
+    id: 'cement-raw-material-costs',
+    sectorId: 'cement',
+    category: 'Costs / Inputs',
+    name: 'Petcoke, Coal & Power-Fuel Costs',
+    description:
+      'Petcoke and coal are the dominant fuel cost for clinkerization; production cost/tonne rose 11% QoQ in Q1 FY27 even as realization improved, squeezing EBITDA/tonne despite firmer prices.',
+    whyItMatters:
+      'In a supply-glut environment, cost inflation cannot be passed through as easily as in a tight market -- rising fuel costs compress margins directly rather than being absorbed by pricing power, which is the mechanism behind the "EBITDA/tonne down even as realization is up" diagnostic.',
+    watchFor: [
+      'Petcoke price trend (moderated slightly Jun-2026; further relief if West Asia tensions ease)',
+      'Company-level production cost/tonne guidance vs realized',
+      'Alternative fuel and green-power substitution progress (structural cost lever, not a quarter-to-quarter one)',
+    ],
+    typicalSource: 'Company investor presentations, petcoke/coal price trackers',
+    frequency: 'Quarterly',
+  },
+  {
+    id: 'cement-regional-pricing',
+    sectorId: 'cement',
+    category: 'Demand',
+    name: 'Regional Pricing & Rural Housing Demand',
+    description:
+      'Cement pricing power is regional, not national -- new-player capacity ramp-up depresses specific regions (Central India weakest, from new entrants plus Dalmia scaling the acquired Jaiprakash assets) independent of the pan-India average; rural housing demand is separately exposed to monsoon/farm-income cycles.',
+    whyItMatters:
+      'A pan-India realization average can mask a much worse regional reality (or vice versa) -- and a below-average monsoon hurting rural incomes is a demand-side headwind layered on top of the supply-side glut, the same mechanism flagged for cotton spinning and agrochemicals.',
+    watchFor: [
+      'Region-wise price hike announcements and their actual realization (vs announced)',
+      'Monsoon/El Nino progress and its read-through to rural housing starts',
+      'Central-region pricing specifically, as the current weak point',
+    ],
+    typicalSource: 'Company/analyst regional pricing trackers, IMD monsoon updates',
+    frequency: 'Monthly',
+  },
+  {
+    id: 'cement-quarterly-results',
+    sectorId: 'cement',
+    category: 'Fundamentals',
+    name: 'Quarterly Results (Volumes, Realization, EBITDA/tonne)',
+    description:
+      'Sales volume, blended realization per tonne, production cost per tonne and EBITDA/tonne reported each quarter -- the sector\'s normalized profitability metrics, since revenue growth alone can mask a volumes-up-margins-down glut dynamic.',
+    whyItMatters:
+      'EBITDA/tonne isolates company-specific cost/mix efficiency from sector-wide price moves -- Q1 FY27\'s combination of +8% volumes, +5% QoQ realization and still -7% QoQ EBITDA/tonne is the clearest evidence this is a supply problem, not a demand or valuation problem.',
+    watchFor: [
+      'EBITDA/tonne trend QoQ and vs the sector floor reference (Rs 1,005/tonne, Q1 FY27)',
+      'Volume growth vs realization growth split',
+      'Capacity utilization % reported alongside results',
+    ],
+    typicalSource: 'Company investor presentations, quarterly results, concall transcripts',
+    frequency: 'Quarterly',
+  },
 ]

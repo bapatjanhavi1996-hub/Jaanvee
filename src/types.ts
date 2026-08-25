@@ -188,3 +188,53 @@ export interface TradePolicyEvent {
   detail: string
   source: string
 }
+
+// Company-level, per-quarter cement operating metrics -- capacity/production
+// are asked for explicitly (unlike steel, where only sales/realization/EBITDA
+// per tonne were tracked) because the entire cement thesis right now is a
+// capacity-vs-demand reconciliation, so capacityMtpa and productionMt need to
+// be visible quarter by quarter per company, not just as a one-time snapshot.
+export interface CementMetricQuarter {
+  period: string
+  capacityMtpa: number | null
+  productionMt: number | null
+  capacityUtilization: number | null
+  salesVolumeTonnes: number | null
+  realizationPerTonne: number | null
+  productionCostPerTonne: number | null
+  ebitdaPerTonne: number | null
+  netDebtToEbitda: number | null
+  source: string
+}
+
+export interface CementCapacityTarget {
+  companyId: string
+  company: string
+  capacityNowMtpa: number
+  capacityAsOf: string
+  targetMtpa: number
+  targetDate: string
+  namedAcquisitions: string
+  organicComponent: string
+  note?: string
+}
+
+// The India-level capacity/demand/supply-gap reconciliation. This is the
+// authoritative, trusted figure for the sector (CRISIL/CareEdge/Axis/Jefferies)
+// -- company-level targets in CementCapacityTarget sum to more than the
+// national addition because they double-count acquired capacity already
+// inside the installed base. Keep this table as the single source of truth
+// when updating the sector over time; don't let it drift by summing company
+// targets instead.
+export interface NationalCapacityReconciliationRow {
+  metric: string
+  value: string
+  note?: string
+}
+
+export interface CementPriceActionPoint {
+  companyId: string
+  company: string
+  pctChange: number
+  asOf: string
+}

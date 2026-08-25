@@ -1,4 +1,4 @@
-import type { BankMetricQuarter, Company, ManagementCommentary, QuarterlyFinancial, SteelMetricQuarter } from '../types'
+import type { BankMetricQuarter, CementMetricQuarter, Company, ManagementCommentary, QuarterlyFinancial, SteelMetricQuarter } from '../types'
 import { heatColor, heatTextColor } from '../lib/heatmap'
 
 interface CompanyDetailProps {
@@ -7,6 +7,7 @@ interface CompanyDetailProps {
   quarters: QuarterlyFinancial[]
   bankQuarters: BankMetricQuarter[]
   steelQuarters: SteelMetricQuarter[]
+  cementQuarters: CementMetricQuarter[]
   commentary: ManagementCommentary[]
   onBack: () => void
 }
@@ -59,7 +60,7 @@ function toAscending(periods: string[], rows: Row[]): { periods: string[]; rows:
   }
 }
 
-export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, steelQuarters, commentary, onBack }: CompanyDetailProps) {
+export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, steelQuarters, cementQuarters, commentary, onBack }: CompanyDetailProps) {
   // All source data (quarters/bankQuarters/steelQuarters) is newest-first --
   // QoQ math below depends on that order. Columns are flipped to oldest-first
   // (left to right) only at the very end, via toAscending(), for display.
@@ -120,6 +121,24 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
   )
 
   const steelSources = Array.from(new Set(steelQuarters.map((q) => q.source).filter(Boolean)))
+
+  const { periods: cementPeriodsAsc, rows: cementRows } = toAscending(
+    cementQuarters.map((q) => q.period),
+    cementQuarters.length
+      ? [
+          { label: 'Capacity (MTPA)', values: cementQuarters.map((q) => q.capacityMtpa), higherIsBetter: true, format: (v) => (v != null ? `${v} MTPA` : '—') },
+          { label: 'Production (Mt)', values: cementQuarters.map((q) => q.productionMt), higherIsBetter: true, format: (v) => (v != null ? `${v} Mt` : '—') },
+          { label: 'Capacity Utilization (%)', values: cementQuarters.map((q) => q.capacityUtilization), higherIsBetter: true, format: formatPct },
+          { label: 'Sales Volume (tonnes)', values: cementQuarters.map((q) => q.salesVolumeTonnes), higherIsBetter: true, format: formatCr },
+          { label: 'Realization (₹/tonne)', values: cementQuarters.map((q) => q.realizationPerTonne), higherIsBetter: true, format: formatCr },
+          { label: 'Production Cost (₹/tonne)', values: cementQuarters.map((q) => q.productionCostPerTonne), higherIsBetter: false, format: formatCr },
+          { label: 'EBITDA/tonne (₹)', values: cementQuarters.map((q) => q.ebitdaPerTonne), higherIsBetter: true, format: formatCr },
+          { label: 'Net Debt/EBITDA (x)', values: cementQuarters.map((q) => q.netDebtToEbitda), higherIsBetter: false, format: (v) => (v != null ? `${v.toFixed(1)}x` : '—') },
+        ]
+      : [],
+  )
+
+  const cementSources = Array.from(new Set(cementQuarters.map((q) => q.source).filter(Boolean)))
 
   const themes: ManagementCommentary['theme'][] = [
     'Asset Quality',
@@ -278,6 +297,48 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
             <p className="text-sm text-zinc-500 dark:text-zinc-400 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4">
               No sales volume, realization/tonne, EBITDA/tonne or net debt data loaded for this
               company yet — this needs a proper quarterly export, not the bulk screener data.
+            </p>
+          )}
+        </section>
+      )}
+
+      {company.sectorId === 'cement' && (
+        <section className="mb-8">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+            Cement Operating Metrics
+          </h3>
+          {cementRows.length > 0 ? (
+            <>
+              <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+                <table className="text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-zinc-50 dark:bg-zinc-900/50 text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                      <th className="px-3 py-2 text-left font-medium sticky left-0 bg-zinc-50 dark:bg-zinc-900/50">Particulars</th>
+                      {cementPeriodsAsc.map((p) => (
+                        <th key={p} className="px-3 py-2 text-right font-medium whitespace-nowrap">
+                          {p}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cementRows.map((row) => (
+                      <HeatRow key={row.label} row={row} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {cementSources.length > 0 && (
+                <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-500">
+                  Sources: {cementSources.join(' · ')}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4">
+              No capacity, production, utilization or EBITDA/tonne data loaded for this company yet
+              — pilot coverage is limited to 8 large/mid-cap names sourced from their own investor
+              presentations and concalls; extend company by company as time allows.
             </p>
           )}
         </section>

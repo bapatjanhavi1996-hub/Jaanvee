@@ -41,6 +41,18 @@ export const sectors: Sector[] = [
       { id: 'steel-rawmaterials', name: 'Iron Ore & Raw Materials' },
     ],
   },
+  {
+    id: 'cement',
+    name: 'Cement',
+    shortDescription:
+      'Listed cement manufacturers on NSE/BSE. Sub-sector split is by market-cap/scale tier (large/mid/regional-small) rather than an official classification -- cement has no clean product-line taxonomy the way banks or steel do.',
+    status: 'active',
+    subSectors: [
+      { id: 'cement-largecap', name: 'Large-cap / Pan-India' },
+      { id: 'cement-midcap', name: 'Mid-cap / Multi-regional' },
+      { id: 'cement-regional-smallcap', name: 'Regional / Small-cap' },
+    ],
+  },
   // Add the next sector here once you're ready to expand further,
   // e.g. { id: 'it-services', name: 'IT Services', status: 'planned', subSectors: [...] }
 ]

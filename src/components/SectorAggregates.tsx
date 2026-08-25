@@ -23,6 +23,19 @@ import {
   otherProducersLatest,
   globalCapacityFacts,
 } from '../data/globalSteelMarket'
+import {
+  nationalCapacityReconciliation,
+  nationalCapacitySource,
+  cementCapacityTargets,
+  jswCementReference,
+  cementCapacityTargetsCaveat,
+  cementPriceAction,
+  cementQ1Fy27Diagnostic,
+  cementQ1Fy27Note,
+  cementCycleFinding,
+  cementWatchItems,
+  cementTrapFlag,
+} from '../data/cementSectorAggregates'
 import { MiniLineChart } from './MiniLineChart'
 
 interface SectorAggregatesProps {
@@ -37,11 +50,13 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl">
           {sectorId === 'steel'
             ? 'System-wide steel production, pricing and trade-policy data — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'
-            : 'System-wide RBI/industry aggregates — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'}
+            : sectorId === 'cement'
+              ? 'National capacity/demand reconciliation, the Q1 FY27 glut diagnostic and company capacity targets — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'
+              : 'System-wide RBI/industry aggregates — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'}
         </p>
       </div>
 
-      {sectorId !== 'steel' && (
+      {sectorId !== 'steel' && sectorId !== 'cement' && (
       <section>
         <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
           RBI Repo Rate
@@ -518,6 +533,170 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
                 format={(v) => `₹${v.toLocaleString('en-IN')}/t`}
               />
             </div>
+          </section>
+        </>
+      )}
+
+      {sectorId === 'cement' && (
+        <>
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              National Capacity Reconciliation
+            </h3>
+            <p className="text-xs text-amber-600 dark:text-amber-400 mb-3">
+              This is the single source of truth for the sector's supply/demand math. Company
+              capacity targets further down sum to more than the national addition because they
+              include capacity acquired from other listed players — already inside the base below —
+              not new tonnes. Trust this table.
+            </p>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+              <table className="w-full text-sm">
+                <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <tr>
+                    <th className="px-4 py-2 font-medium">Metric</th>
+                    <th className="px-4 py-2 font-medium text-right">Figure</th>
+                    <th className="px-4 py-2 font-medium">Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {nationalCapacityReconciliation.map((r) => (
+                    <tr
+                      key={r.metric}
+                      className={`border-t border-zinc-100 dark:border-zinc-800 ${
+                        r.metric === 'SUPPLY-DEMAND GAP' ? 'bg-amber-50 dark:bg-amber-900/20 font-medium' : ''
+                      }`}
+                    >
+                      <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">{r.metric}</td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{r.value}</td>
+                      <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">{r.note ?? '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">{nationalCapacitySource}</p>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Q1 FY27 Diagnostic
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-3">
+              {cementQ1Fy27Diagnostic.map((m) => (
+                <div key={m.metric} className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-3">
+                  <p className="text-[11px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">{m.metric}</p>
+                  <p className="mt-1 text-sm font-medium tabular-nums text-zinc-900 dark:text-zinc-100">{m.value}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">{cementQ1Fy27Note}</p>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              24-Aug-2026 Price Action
+            </h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+              Seventeen of eighteen names down together — read as the market repricing the glut
+              thesis above, not a fact specific to any one name. Only Mangalam breaks the pattern.
+            </p>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+              <table className="w-full text-sm">
+                <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <tr>
+                    <th className="px-4 py-2 font-medium">Company</th>
+                    <th className="px-4 py-2 font-medium text-right">Change</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cementPriceAction
+                    .slice()
+                    .sort((a, b) => a.pctChange - b.pctChange)
+                    .map((p) => (
+                      <tr key={p.companyId} className="border-t border-zinc-100 dark:border-zinc-800">
+                        <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">{p.company}</td>
+                        <td
+                          className={`px-4 py-2 text-right tabular-nums font-medium ${
+                            p.pctChange >= 0
+                              ? 'text-emerald-700 dark:text-emerald-400'
+                              : 'text-rose-700 dark:text-rose-400'
+                          }`}
+                        >
+                          {p.pctChange >= 0 ? '+' : ''}
+                          {p.pctChange}%
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+              As of {cementPriceAction[0]?.asOf} — in-house sector research note.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Company Capacity Targets
+            </h3>
+            <p className="text-xs text-amber-600 dark:text-amber-400 mb-3">{cementCapacityTargetsCaveat}</p>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+              <table className="w-full text-sm">
+                <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <tr>
+                    <th className="px-4 py-2 font-medium">Company</th>
+                    <th className="px-4 py-2 font-medium text-right">Now</th>
+                    <th className="px-4 py-2 font-medium text-right">Target</th>
+                    <th className="px-4 py-2 font-medium">By</th>
+                    <th className="px-4 py-2 font-medium">Named Acquisitions</th>
+                    <th className="px-4 py-2 font-medium">Organic Component</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...cementCapacityTargets, jswCementReference].map((t) => (
+                    <tr key={t.companyId} className="border-t border-zinc-100 dark:border-zinc-800 align-top">
+                      <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{t.company}</td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                        {t.capacityNowMtpa} MTPA
+                        <span className="block text-[10px] text-zinc-400 dark:text-zinc-500">{t.capacityAsOf}</span>
+                      </td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{t.targetMtpa} MTPA</td>
+                      <td className="px-4 py-2 text-xs text-zinc-600 dark:text-zinc-400 whitespace-nowrap">{t.targetDate}</td>
+                      <td className="px-4 py-2 text-xs text-zinc-600 dark:text-zinc-400">{t.namedAcquisitions}</td>
+                      <td className="px-4 py-2 text-xs text-zinc-600 dark:text-zinc-400">
+                        {t.organicComponent}
+                        {t.note && <span className="block mt-1 text-amber-600 dark:text-amber-400">⚠ {t.note}</span>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Why This Fails the Investment Mandate
+            </h3>
+            <p className="text-sm text-zinc-700 dark:text-zinc-300 mb-3">{cementCycleFinding}</p>
+            <div className="rounded-lg border border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-900/20 p-4">
+              <p className="text-xs font-medium text-amber-800 dark:text-amber-300 mb-1">Trap flagged</p>
+              <p className="text-sm text-amber-900 dark:text-amber-200">{cementTrapFlag}</p>
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Watch Items
+            </h3>
+            <ul className="space-y-1.5">
+              {cementWatchItems.map((w) => (
+                <li key={w} className="text-sm text-zinc-700 dark:text-zinc-300 flex gap-2">
+                  <span className="text-zinc-400 dark:text-zinc-600">•</span>
+                  <span>{w}</span>
+                </li>
+              ))}
+            </ul>
           </section>
         </>
       )}
