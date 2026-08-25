@@ -336,9 +336,7 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
             </>
           ) : (
             <p className="text-sm text-zinc-500 dark:text-zinc-400 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4">
-              No capacity, production, utilization or EBITDA/tonne data loaded for this company yet
-              — pilot coverage is limited to 8 large/mid-cap names sourced from their own investor
-              presentations and concalls; extend company by company as time allows.
+              No capacity, production, utilization or EBITDA/tonne data loaded for this company yet.
             </p>
           )}
         </section>
