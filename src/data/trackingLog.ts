@@ -340,4 +340,27 @@ export const trackingLog: TrackingLogEntry[] = [
     source: 'In-house sector research note, 25-Aug-2026',
     impact: 'Watch',
   },
+  {
+    id: 'log-2026-rbi-nbfc-upper-layer-list',
+    date: '2026-08-06',
+    sectorId: 'nbfc',
+    triggerId: 'nbfc-regulatory-action',
+    companyIds: [
+      'rec-ltd',
+      'power-finance-corporation-ltd',
+      'indian-railway-finance-corporation-ltd',
+      'housing-urban-development-corporation-ltd',
+      'bajaj-finance-ltd',
+      'shriram-finance-ltd',
+      'muthoot-finance-ltd',
+      'mahindra-mahindra-financial-services-ltd',
+      'l-t-finance-ltd',
+      'bajaj-housing-finance-ltd',
+    ],
+    headline: 'RBI expands NBFC Upper Layer (NBFC-UL) list to 17 for 2026-27, adding REC, PFC, IRFC and HUDCO -- caught late, missed on the day it broke',
+    detail:
+      'RBI released its NBFC-UL list for 2026-27 (financials as of 31-Mar-2026, under a revised identification framework) -- its first such list since 2024-25, having skipped 2025-26 for a framework review. The list grew from 15 to 17 names, with four PSU infra-lending institutions newly added: REC, Power Finance Corporation, Indian Railway Finance Corporation and HUDCO. Upper Layer classification carries enhanced regulatory requirements (higher capital/governance/disclosure norms similar to systemically important banks) -- a fresh compliance burden specifically for the four new entrants. Tata Sons\' continued inclusion is stated "without prejudice" to its still-pending de-registration application. The companyIds list above is not exhaustive of all 17 -- Tata Capital, Aditya Birla Capital, HDB Financial Services, Cholamandalam and Piramal Finance are also on the RBI list and present in companies.ts but not individually tagged here; Tata Sons is unlisted and not in companies.ts at all.',
+    source: 'RBI press release, The Statesman, Zee Business, Adda247 -- NBFC-UL list 2026-27, 6-Aug-2026',
+    impact: 'Watch',
+  },
 ]
