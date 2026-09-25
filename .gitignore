@@ -27,3 +27,5 @@ dist-ssr
 scripts/nse/data/raw/
 scripts/nse/data/fii-value-daily.json
 scripts/nse/data/participant-daily.json
+scripts/nse/data/participant-monthly.json
+scripts/nse/data/dashboard-data.json
