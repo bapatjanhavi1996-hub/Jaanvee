@@ -9,6 +9,8 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "nse:fetch": "node scripts/nse/fetch-participant-data.mjs",
+    "nse:bhav": "node scripts/nse/fetch-bhavcopy.mjs",
+    "nse:fii": "python3 scripts/nse/parse-fii-stats.py",
     "nse:build": "node scripts/nse/build-dataset.mjs"
   },
   "dependencies": {

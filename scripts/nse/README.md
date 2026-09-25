@@ -31,27 +31,53 @@ Two reports:
 
 Coverage: verified available from ~2020 to present.
 
+## The three data sources
+
+| What | Source | Volume | Value |
+|------|--------|:------:|:-----:|
+| Participant × instrument, long/short | participant CSVs | ✅ contracts | — |
+| Product turnover (index/stock fut & opt) | F&O BhavCopy | ✅ contracts | ✅ ₹ cr |
+| FII by product | FII stats `.xls` | ✅ contracts | ✅ ₹ cr |
+
+**Value caveats (important):**
+
+- **Futures value** is actual traded turnover (₹). Consistent across all years.
+- **Options value** is **notional turnover** (contracts × lot × underlying), not
+  premium — this is how NSE's BhavCopy and FII stats both report it, in both the
+  legacy and the 2024+ UDiFF formats, so the series is continuous. Options
+  notional is far larger than premium; label it accordingly in any chart.
+- Value **by participant** exists only for **FII**. Client / DII / Pro value is
+  not disclosed by NSE (it could only be estimated).
+
 ## Usage
 
 ```bash
-# 1. Fetch raw daily reports (default: last 5 years). Add --with-fii for FII value.
-npm run nse:fetch -- --from 2020-01-01 --with-fii
+# 1. Participant volume + OI (all four participants), last 5 years. --with-fii
+#    also pulls the FII value .xls each day.
+npm run nse:fetch -- --from 2020-09-01 --with-fii
+
+# 2. Product turnover VALUE + volume from the F&O BhavCopy.
+#    Default: last trading day of each month (~60 light files). --daily for all.
+npm run nse:bhav -- --from 2020-09-01
+
+# 3. Parse the FII value .xls files (needs: pip install xlrd==2.0.1)
+npm run nse:fii
+
+# 4. Merge everything into the dashboard dataset
+npm run nse:build
 
 # quick test window:
-npm run nse:fetch -- --from 2026-09-16 --to 2026-09-24
-
-# 2. Parse raw CSVs into tidy + monthly datasets
-npm run nse:build
+npm run nse:fetch -- --from 2026-09-16 --to 2026-09-24 --with-fii
 ```
 
 Outputs:
 
-- `data/raw/…` — raw downloaded files (git-ignored; regenerate any time).
-- `data/participant-daily.json` — one record per trading day, per participant,
-  with per-instrument long/short, `share` (% of day's contracts), and `net`
-  (long − short).
-- `data/participant-monthly.json` — monthly `avgContracts`, `avgSharePct`,
-  `avgNet` per participant/report, for trend charts.
+- `data/raw/…` — raw downloaded files, incl. `raw/bhav/*.zip` (git-ignored).
+- `data/fii-value-daily.json` — FII value by product per day (git-ignored intermediate).
+- `data/participant-daily.json` — latest-day participant × instrument snapshot.
+- **`data/dashboard-data.json`** — the consolidated monthly payload the dashboard
+  loads: `participant` (vol / oi contracts, share %, FII value ₹cr) and `product`
+  (vol contracts, value ₹cr) series over all months, plus the `latest` snapshot.
 
 ## How the fetch works (and why it needs a browser)
 
