@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# NSE fetched data (regenerate with npm run nse:fetch && npm run nse:build)
+scripts/nse/data/raw/
