@@ -307,11 +307,11 @@ function main() {
       value: participantValue, // ₹cr total per participant; Client/DII/Pro estimated
       valueEstimated: ['Client', 'DII', 'Pro'],
     },
-    // product evolution: volume (participant TOTAL avg/day) + value (bhavcopy month-end ₹cr)
+    // product evolution: MONTHLY TOTALS from bhavcopy (summed over all trading
+    // days) so options value/volume aren't skewed by which day is sampled.
     product: {
-      vol: Object.fromEntries(PRODUCTS.map((p) => [p, months.map((m) => round(avg(prodVolMonthly[m]?.[p] || [])))])),
-      valueCr: Object.fromEntries(PRODUCTS.map((p) => [p, months.map((m) => round(prodBhavMonthly[m]?.[p]?.v || 0))])),
-      volBhav: Object.fromEntries(PRODUCTS.map((p) => [p, months.map((m) => round(prodBhavMonthly[m]?.[p]?.c || 0))])),
+      vol: Object.fromEntries(PRODUCTS.map((p) => [p, months.map((m) => round(nseAgg[m]?.[p]?.c || 0))])),
+      valueCr: Object.fromEntries(PRODUCTS.map((p) => [p, months.map((m) => round(nseAgg[m]?.[p]?.v || 0))])),
     },
     // NSE vs BSE by product + total; combined & share computed client-side
     exchange: {
