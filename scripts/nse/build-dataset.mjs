@@ -79,37 +79,37 @@ function collectPart(report) {
 
 // ---- 2. BhavCopy zips (product value + volume) -----------------------------
 function parseBhav(csv, format) {
-  const acc = { indexFut: { c: 0, v: 0, oi: 0, pr: 0 }, stockFut: { c: 0, v: 0, oi: 0, pr: 0 }, indexOpt: { c: 0, v: 0, oi: 0, pr: 0 }, stockOpt: { c: 0, v: 0, oi: 0, pr: 0 } }
+  const acc = { indexFut: { c: 0, v: 0, oi: 0 }, stockFut: { c: 0, v: 0, oi: 0 }, indexOpt: { c: 0, v: 0, oi: 0 }, stockOpt: { c: 0, v: 0, oi: 0 } }
   const lines = csv.split(/\r?\n/)
   for (let i = 1; i < lines.length; i++) {
     if (!lines[i]) continue
     const c = lines[i].split(',')
-    let prod, contracts, valueCr, oi, premiumCr
+    let prod, contracts, valueCr, oi
     if (format === 'legacy') {
       const map = { FUTIDX: 'indexFut', FUTSTK: 'stockFut', OPTIDX: 'indexOpt', OPTSTK: 'stockOpt' }
       prod = map[c[0]]
       contracts = num(c[10]) // CONTRACTS
       valueCr = num(c[11]) / 100 // VAL_INLAKH (lakh) -> crore
       oi = num(c[12]) // OPEN_INT
-      premiumCr = 0 // legacy bhavcopy has no lot size -> premium not computable (pre-2024, not used for the exchange tab)
     } else {
       const map = { IDF: 'indexFut', STF: 'stockFut', IDO: 'indexOpt', STO: 'stockOpt' }
       prod = map[c[4]]
       contracts = num(c[24]) // TtlTradgVol
       valueCr = num(c[25]) / 1e7 // TtlTrfVal (rupees) -> crore (notional for options)
       oi = num(c[22]) // OpnIntrst
-      // premium turnover ~= contracts * lot * traded premium (close as proxy); for futures this equals traded value
-      premiumCr = (num(c[24]) * num(c[28]) * num(c[17])) / 1e7
     }
     if (prod) {
       acc[prod].c += contracts
       acc[prod].v += valueCr
       acc[prod].oi += oi
-      acc[prod].pr += premiumCr
     }
   }
   return acc
 }
+// NOTE: premium turnover is deliberately NOT derived here. The bhavcopy has no
+// per-trade premium field, and on expiry days ClsPric is set to the underlying
+// index level for every strike, so a contracts*lot*close proxy explodes. Real
+// premium turnover must come from the exchanges' own published figures.
 
 // BSE F&O bhavcopy: plain .csv (UDiFF), one per month-end
 function collectBSE() {
@@ -259,11 +259,10 @@ function main() {
       const k = ym(date)
       const m = (tmp[k] ??= {})
       for (const p of PRODUCTS) {
-        const mp = (m[p] ??= { c: 0, v: 0, oi: [], pr: 0 })
+        const mp = (m[p] ??= { c: 0, v: 0, oi: [] })
         mp.c += rec[p].c
         mp.v += rec[p].v
         mp.oi.push(rec[p].oi)
-        mp.pr += rec[p].pr
       }
     }
     const out = {}
@@ -271,7 +270,7 @@ function main() {
       out[k] = {}
       for (const p of PRODUCTS) {
         const x = tmp[k][p]
-        out[k][p] = { c: x.c, v: x.v, oi: avg(x.oi), pr: x.pr }
+        out[k][p] = { c: x.c, v: x.v, oi: avg(x.oi) }
       }
     }
     return out
@@ -323,7 +322,6 @@ function main() {
       valueCr: buildEx('v'),
       vol: buildEx('c'),
       oi: buildEx('oi'),
-      premiumCr: buildEx('pr'), // approx: contracts × lot × close premium
       bseFrom,
     },
     latest: latestDate ? buildLatest(vol[latestDate], oi[latestDate], latestDate) : null,
