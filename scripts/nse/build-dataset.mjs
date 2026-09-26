@@ -79,29 +79,47 @@ function collectPart(report) {
 
 // ---- 2. BhavCopy zips (product value + volume) -----------------------------
 function parseBhav(csv, format) {
-  const acc = { indexFut: { c: 0, v: 0 }, stockFut: { c: 0, v: 0 }, indexOpt: { c: 0, v: 0 }, stockOpt: { c: 0, v: 0 } }
+  const acc = { indexFut: { c: 0, v: 0, oi: 0 }, stockFut: { c: 0, v: 0, oi: 0 }, indexOpt: { c: 0, v: 0, oi: 0 }, stockOpt: { c: 0, v: 0, oi: 0 } }
   const lines = csv.split(/\r?\n/)
   for (let i = 1; i < lines.length; i++) {
     if (!lines[i]) continue
     const c = lines[i].split(',')
-    let prod, contracts, valueCr
+    let prod, contracts, valueCr, oi
     if (format === 'legacy') {
       const map = { FUTIDX: 'indexFut', FUTSTK: 'stockFut', OPTIDX: 'indexOpt', OPTSTK: 'stockOpt' }
       prod = map[c[0]]
       contracts = num(c[10]) // CONTRACTS
       valueCr = num(c[11]) / 100 // VAL_INLAKH (lakh) -> crore
+      oi = num(c[12]) // OPEN_INT
     } else {
       const map = { IDF: 'indexFut', STF: 'stockFut', IDO: 'indexOpt', STO: 'stockOpt' }
       prod = map[c[4]]
       contracts = num(c[24]) // TtlTradgVol
       valueCr = num(c[25]) / 1e7 // TtlTrfVal (rupees) -> crore
+      oi = num(c[22]) // OpnIntrst
     }
     if (prod) {
       acc[prod].c += contracts
       acc[prod].v += valueCr
+      acc[prod].oi += oi
     }
   }
   return acc
+}
+
+// BSE F&O bhavcopy: plain .csv (UDiFF), one per month-end
+function collectBSE() {
+  const dir = path.join(RAW, 'bse')
+  const byDate = {}
+  if (!fs.existsSync(dir)) return byDate
+  for (const f of fs.readdirSync(dir)) {
+    const m = f.match(/^bse_(\d{4})(\d{2})(\d{2})\.csv$/)
+    if (!m) continue
+    const csv = fs.readFileSync(path.join(dir, f), 'utf8')
+    if (!csv.startsWith('TradDt')) continue
+    byDate[`${m[1]}-${m[2]}-${m[3]}`] = parseBhav(csv, 'udiff')
+  }
+  return byDate
 }
 function collectBhav() {
   const byDate = {}
@@ -133,6 +151,7 @@ function main() {
   const vol = collectPart('vol')
   const oi = collectPart('oi')
   const bhav = collectBhav()
+  const bse = collectBSE()
   let fiiDaily = []
   const fiiPath = path.join(OUT, 'fii-value-daily.json')
   if (fs.existsSync(fiiPath)) fiiDaily = JSON.parse(fs.readFileSync(fiiPath, 'utf8'))
@@ -182,7 +201,7 @@ function main() {
   }
 
   // ---- product monthly from bhavcopy (value + volume, month-end snapshot) ----
-  const prodBhavMonthly = {} // ym -> {product:{c,v}} (last snapshot in month)
+  const prodBhavMonthly = {} // ym -> {product:{c,v,oi}} (last snapshot in month) — NSE
   for (const date of Object.keys(bhav).sort()) {
     prodBhavMonthly[ym(date)] = bhav[date] // later dates overwrite -> month-end
   }
@@ -225,6 +244,51 @@ function main() {
   )
   const participantValue = { ...valueEst, FII: valueFii } // FII overridden with disclosed figure
 
+  // ---- NSE vs BSE market share ----
+  // Cross-exchange comparison needs FULL-MONTH aggregation, not a month-end
+  // snapshot: NSE and BSE expire on different weekdays, so any single day is
+  // skewed by whose expiry it is. Turnover & volume are summed over all trading
+  // days in the month; open interest (a stock, not a flow) is averaged.
+  const monthlyAgg = (byDate) => {
+    const tmp = {}
+    for (const [date, rec] of Object.entries(byDate)) {
+      const k = ym(date)
+      const m = (tmp[k] ??= {})
+      for (const p of PRODUCTS) {
+        const mp = (m[p] ??= { c: 0, v: 0, oi: [] })
+        mp.c += rec[p].c
+        mp.v += rec[p].v
+        mp.oi.push(rec[p].oi)
+      }
+    }
+    const out = {}
+    for (const k in tmp) {
+      out[k] = {}
+      for (const p of PRODUCTS) {
+        const x = tmp[k][p]
+        out[k][p] = { c: x.c, v: x.v, oi: avg(x.oi) }
+      }
+    }
+    return out
+  }
+  const nseAgg = monthlyAgg(bhav)
+  const bseAgg = monthlyAgg(bse)
+  const bseFrom = Object.keys(bseAgg).sort()[0] || null
+  const inWin = (m) => bseFrom && m >= bseFrom // only months where both have daily data
+  const exField = (agg, m, field, seg) =>
+    seg === 'total'
+      ? PRODUCTS.reduce((s, p) => s + (agg[m]?.[p]?.[field] || 0), 0)
+      : agg[m]?.[seg]?.[field] || 0
+  const buildEx = (field) => {
+    const o = {}
+    for (const seg of [...PRODUCTS, 'total'])
+      o[seg] = {
+        nse: months.map((m) => (inWin(m) ? round(exField(nseAgg, m, field, seg)) : null)),
+        bse: months.map((m) => (inWin(m) ? round(exField(bseAgg, m, field, seg)) : null)),
+      }
+    return o
+  }
+
   const out = {
     generatedAt: new Date().toISOString(),
     months,
@@ -248,6 +312,13 @@ function main() {
       vol: Object.fromEntries(PRODUCTS.map((p) => [p, months.map((m) => round(avg(prodVolMonthly[m]?.[p] || [])))])),
       valueCr: Object.fromEntries(PRODUCTS.map((p) => [p, months.map((m) => round(prodBhavMonthly[m]?.[p]?.v || 0))])),
       volBhav: Object.fromEntries(PRODUCTS.map((p) => [p, months.map((m) => round(prodBhavMonthly[m]?.[p]?.c || 0))])),
+    },
+    // NSE vs BSE by product + total; combined & share computed client-side
+    exchange: {
+      valueCr: buildEx('v'),
+      vol: buildEx('c'),
+      oi: buildEx('oi'),
+      bseFrom,
     },
     latest: latestDate ? buildLatest(vol[latestDate], oi[latestDate], latestDate) : null,
   }
