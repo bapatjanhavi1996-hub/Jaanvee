@@ -168,6 +168,19 @@ function main() {
     for (const p of PRODUCTS) (m[p] ??= []).push(pc[p])
   }
 
+  // ---- participant volume by product (monthly avg daily contracts) ----
+  const partProdVol = {} // ym -> {participant:{product:[dailyContracts]}}
+  for (const [date, rows] of Object.entries(vol)) {
+    const k = ym(date)
+    const m = (partProdVol[k] ??= {})
+    for (const p of PARTS) {
+      if (!rows[p]) continue
+      const pc = prodContracts(rows[p])
+      const mp = (m[p] ??= {})
+      for (const prod of PRODUCTS) (mp[prod] ??= []).push(pc[prod])
+    }
+  }
+
   // ---- product monthly from bhavcopy (value + volume, month-end snapshot) ----
   const prodBhavMonthly = {} // ym -> {product:{c,v}} (last snapshot in month)
   for (const date of Object.keys(bhav).sort()) {
@@ -189,6 +202,29 @@ function main() {
   const series = (obj, month, fn) => fn(obj[month])
   const round = (n) => Math.round(n)
 
+  // ---- participant VALUE (₹cr) ----
+  // FII: real disclosed (sum of its per-product traded value).
+  // Client/DII/Pro: ESTIMATED — allocate each product's turnover value to a
+  //   participant by that participant's share of the product's volume:
+  //   estValue[p] = Σ_product  productValueCr[product] × (partProdVol[p] / totalProdVol)
+  const valueFii = months.map((m) => round(PRODUCTS.reduce((s, prod) => s + avg(fiiMonthly[m]?.[prod]?.traded || []), 0)))
+  const valueEst = Object.fromEntries(
+    PARTS.map((p) => [
+      p,
+      months.map((m) => {
+        let tot = 0
+        for (const prod of PRODUCTS) {
+          const pv = avg(partProdVol[m]?.[p]?.[prod] || [])
+          const tv = avg(prodVolMonthly[m]?.[prod] || [])
+          const val = prodBhavMonthly[m]?.[prod]?.v || 0
+          if (tv > 0) tot += val * (pv / tv)
+        }
+        return round(tot)
+      }),
+    ]),
+  )
+  const participantValue = { ...valueEst, FII: valueFii } // FII overridden with disclosed figure
+
   const out = {
     generatedAt: new Date().toISOString(),
     months,
@@ -204,6 +240,8 @@ function main() {
       shareVol: Object.fromEntries(PARTS.map((p) => [p, months.map((m) => +avg(partMonthly[m]?.shareVol[p] || []).toFixed(2))])),
       shareOi: Object.fromEntries(PARTS.map((p) => [p, months.map((m) => +avg(partMonthly[m]?.shareOi[p] || []).toFixed(2))])),
       valueFiiCr: Object.fromEntries(PRODUCTS.map((p) => [p, months.map((m) => round(avg(fiiMonthly[m]?.[p]?.traded || [])))])),
+      value: participantValue, // ₹cr total per participant; Client/DII/Pro estimated
+      valueEstimated: ['Client', 'DII', 'Pro'],
     },
     // product evolution: volume (participant TOTAL avg/day) + value (bhavcopy month-end ₹cr)
     product: {
