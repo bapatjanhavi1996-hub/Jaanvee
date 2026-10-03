@@ -313,3 +313,48 @@ export interface BrokerRegulatoryEvent {
   detail: string
   source: string
 }
+
+// Annual financials for broker/intermediary companies (the IS + BS + ratio
+// layer the user asked for, to build ratios on). Sourced from screener.in
+// consolidated statements (research date 2026-10-03). Stored newest-first to
+// match the QuarterlyFinancial convention; the UI flips to ascending for
+// display and computes net margin + valuation (P/E, P/B) from these plus the
+// company's market cap. Null = not available (never estimated).
+export interface BrokerFinancialYear {
+  fy: string
+  salesCr: number | null
+  operatingProfitCr: number | null
+  opmPct: number | null
+  netProfitCr: number | null
+  netWorthCr: number | null
+  borrowingsCr: number | null
+  totalAssetsCr: number | null
+  roePct: number | null
+  source: string
+}
+
+// The per-company "story" -- the crisp, terse thesis the user wants: why
+// people are buying it, the one number that anchors the case, and the bear
+// case. This is editorial synthesis, not a sourced datapoint; it is the
+// narrative layer that sits on top of the financials + operating metrics.
+export interface BrokerThesis {
+  companyId: string
+  tagline: string // one punchy line -- what this company IS
+  pitch: string // the bull case / why people buy it (terse)
+  numbers: string // the anchoring stat line
+  risk: string // the bear case / what breaks it
+}
+
+// A flexible latest-period operating-KPI snapshot per broker/intermediary.
+// The fixed BrokerMetricQuarter schema (clients/funding/interest) fits the
+// discount brokers but not the AUM-based wealth names or the exchange/RTA
+// market-infrastructure names, whose key KPIs are AUM/AUA, ARR, net flows,
+// demat accounts, turnover and market share. This captures each company's own
+// headline operating numbers, sourced, as a simple labelled list.
+export interface BrokerKpi {
+  label: string
+  value: string
+  asOf: string
+  source: string
+  note?: string
+}

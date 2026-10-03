@@ -12,6 +12,9 @@ import { bankMetrics } from './data/bankMetrics'
 import { steelMetrics } from './data/steelMetrics'
 import { cementMetrics } from './data/cementMetrics'
 import { brokerMetrics } from './data/brokerMetrics'
+import { brokerFinancials } from './data/brokerFinancials'
+import { brokerThesis } from './data/brokerThesis'
+import { brokerOperatingKpis } from './data/brokerOperatingKpis'
 import { managementCommentary } from './data/managementCommentary'
 import { Sidebar } from './components/Sidebar'
 import { TabNav, type ViewId } from './components/TabNav'
@@ -75,6 +78,9 @@ function App() {
             steelQuarters={steelMetrics[selectedCompany.id] ?? []}
             cementQuarters={cementMetrics[selectedCompany.id] ?? []}
             brokerQuarters={brokerMetrics[selectedCompany.id] ?? []}
+            brokerYears={brokerFinancials[selectedCompany.id] ?? []}
+            thesis={brokerThesis.find((t) => t.companyId === selectedCompany.id) ?? null}
+            brokerKpis={brokerOperatingKpis[selectedCompany.id] ?? []}
             commentary={managementCommentary.filter((c) => c.companyId === selectedCompany.id)}
             onBack={() => setSelectedCompanyId(null)}
           />
