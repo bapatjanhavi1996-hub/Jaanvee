@@ -4,9 +4,12 @@ A dashboard for tracking listed Indian companies (universe: market cap > ₹1,00
 by sector, the recurring **triggers** that move each sector, and a log of triggers
 as they actually fire.
 
-Currently covers **Banks** (Private, PSU, Small Finance) and **NBFCs / Financial
+Currently covers **Banks** (Private, PSU, Small Finance), **NBFCs / Financial
 Lenders** (Diversified, Vehicle Finance, Housing Finance, Gold Loan, Microfinance,
-SME, Infra/PSU lending institutions).
+SME, Infra/PSU lending institutions), **Steel**, **Cement**, and **Brokers /
+Capital Market Intermediaries** (Discount/Digital brokers, Full-service brokers,
+Wealth Management, MF Distribution, and Market Infrastructure — exchanges,
+depositories, RTAs).
 
 ## Structure
 

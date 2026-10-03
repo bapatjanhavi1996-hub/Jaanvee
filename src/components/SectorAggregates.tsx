@@ -36,6 +36,16 @@ import {
   cementWatchItems,
   cementTrapFlag,
 } from '../data/cementSectorAggregates'
+import {
+  brokerActiveClientLeague,
+  brokerActiveClientNote,
+  brokerActiveClientSource,
+  brokerIndustryAggregates,
+  brokerRegulatoryEvents,
+  brokerSectorFinding,
+  brokerTrapFlag,
+  brokerWatchItems,
+} from '../data/brokerSectorAggregates'
 import { MiniLineChart } from './MiniLineChart'
 
 interface SectorAggregatesProps {
@@ -52,11 +62,13 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
             ? 'System-wide steel production, pricing and trade-policy data — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'
             : sectorId === 'cement'
               ? 'National capacity/demand reconciliation, the Q1 FY27 glut diagnostic and company capacity targets — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'
-              : 'System-wide RBI/industry aggregates — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'}
+              : sectorId === 'brokers'
+                ? 'The NSE active-client league table (who is gaining/losing share), the industry financialization backdrop, and the SEBI regulatory package that is the whole sector thesis — the macro backdrop every company-level trigger and trend should be read against.'
+                : 'System-wide RBI/industry aggregates — the macro backdrop every company-level trigger and trend in this dashboard should be read against.'}
         </p>
       </div>
 
-      {sectorId !== 'steel' && sectorId !== 'cement' && (
+      {sectorId !== 'steel' && sectorId !== 'cement' && sectorId !== 'brokers' && (
       <section>
         <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
           RBI Repo Rate
@@ -691,6 +703,167 @@ export function SectorAggregates({ sectorId }: SectorAggregatesProps) {
             </h3>
             <ul className="space-y-1.5">
               {cementWatchItems.map((w) => (
+                <li key={w} className="text-sm text-zinc-700 dark:text-zinc-300 flex gap-2">
+                  <span className="text-zinc-400 dark:text-zinc-600">•</span>
+                  <span>{w}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      )}
+
+      {sectorId === 'brokers' && (
+        <>
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              NSE Active-Client League Table
+            </h3>
+            <p className="text-xs text-amber-600 dark:text-amber-400 mb-3">
+              The single most-watched competitive metric in Indian broking. Includes the two
+              unlisted giants (Zerodha, Upstox) because the listed names' share is meaningless
+              without them — the "Listed?" column flags what is actually investable.
+            </p>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+              <table className="w-full text-sm">
+                <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <tr>
+                    <th className="px-4 py-2 font-medium">Broker</th>
+                    <th className="px-4 py-2 font-medium">Listed?</th>
+                    <th className="px-4 py-2 font-medium text-right">Active Clients</th>
+                    <th className="px-4 py-2 font-medium text-right">Share</th>
+                    <th className="px-4 py-2 font-medium text-right">YoY</th>
+                    <th className="px-4 py-2 font-medium">As of</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {brokerActiveClientLeague.map((b) => (
+                    <tr key={b.broker} className="border-t border-zinc-100 dark:border-zinc-800">
+                      <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                        {b.broker}
+                        {b.ticker && <span className="ml-1 text-[11px] text-zinc-400 dark:text-zinc-500">{b.ticker}</span>}
+                      </td>
+                      <td className="px-4 py-2">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs ${
+                            b.isListed
+                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
+                              : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400'
+                          }`}
+                        >
+                          {b.isListed ? 'Listed' : 'Unlisted'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
+                        {b.activeClientsMn != null ? `${b.activeClientsMn.toFixed(2)}m` : '—'}
+                      </td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100">
+                        {b.sharePct != null ? `${b.sharePct}%` : '—'}
+                      </td>
+                      <td
+                        className={`px-4 py-2 text-right tabular-nums font-medium ${
+                          b.yoyGrowthPct == null
+                            ? 'text-zinc-400 dark:text-zinc-500'
+                            : b.yoyGrowthPct >= 0
+                              ? 'text-emerald-700 dark:text-emerald-400'
+                              : 'text-rose-700 dark:text-rose-400'
+                        }`}
+                      >
+                        {b.yoyGrowthPct == null ? '—' : `${b.yoyGrowthPct >= 0 ? '+' : ''}${b.yoyGrowthPct}%`}
+                      </td>
+                      <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400 whitespace-nowrap">{b.asOf}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">{brokerActiveClientNote}</p>
+            <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">{brokerActiveClientSource}</p>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Industry / Financialization Backdrop
+            </h3>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+              <table className="w-full text-sm">
+                <thead className="bg-zinc-50 dark:bg-zinc-900/50 text-left text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <tr>
+                    <th className="px-4 py-2 font-medium">Metric</th>
+                    <th className="px-4 py-2 font-medium text-right">Value</th>
+                    <th className="px-4 py-2 font-medium">As of</th>
+                    <th className="px-4 py-2 font-medium">Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {brokerIndustryAggregates.map((r) => (
+                    <tr key={r.metric} className="border-t border-zinc-100 dark:border-zinc-800 align-top">
+                      <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">{r.metric}</td>
+                      <td className="px-4 py-2 text-right tabular-nums text-zinc-900 dark:text-zinc-100 whitespace-nowrap">{r.value}</td>
+                      <td className="px-4 py-2 text-xs text-zinc-600 dark:text-zinc-400 whitespace-nowrap">{r.asOf}</td>
+                      <td className="px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400">
+                        {r.note ?? '—'}
+                        <span className="block mt-0.5 text-[11px] text-zinc-400 dark:text-zinc-500">{r.source}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              SEBI / Exchange Regulation — the thesis driver
+            </h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+              For brokers this is what trade policy is to steel: the dominant exogenous driver. The
+              2024-25 package is why transaction revenue is under structural (not cyclical) pressure.
+            </p>
+            <div className="space-y-3">
+              {brokerRegulatoryEvents.map((e) => (
+                <div key={`${e.date}-${e.measure}`} className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-medium text-zinc-900 dark:text-zinc-50">{e.measure}</p>
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{e.date}</p>
+                    </div>
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-1 text-xs ${
+                        e.status === 'Effective' || e.status === 'Imposed'
+                          ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300'
+                          : e.status === 'Eased'
+                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
+                            : 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300'
+                      }`}
+                    >
+                      {e.status}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300">{e.detail}</p>
+                  <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">Source: {e.source}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Sector Thesis
+            </h3>
+            <p className="text-sm text-zinc-700 dark:text-zinc-300 mb-3">{brokerSectorFinding}</p>
+            <div className="rounded-lg border border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-900/20 p-4">
+              <p className="text-xs font-medium text-amber-800 dark:text-amber-300 mb-1">The honest risk</p>
+              <p className="text-sm text-amber-900 dark:text-amber-200">{brokerTrapFlag}</p>
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+              Watch Items
+            </h3>
+            <ul className="space-y-1.5">
+              {brokerWatchItems.map((w) => (
                 <li key={w} className="text-sm text-zinc-700 dark:text-zinc-300 flex gap-2">
                   <span className="text-zinc-400 dark:text-zinc-600">•</span>
                   <span>{w}</span>

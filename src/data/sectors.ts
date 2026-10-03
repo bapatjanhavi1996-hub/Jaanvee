@@ -53,6 +53,20 @@ export const sectors: Sector[] = [
       { id: 'cement-regional-smallcap', name: 'Regional / Small-cap' },
     ],
   },
+  {
+    id: 'brokers',
+    name: 'Brokers / Capital Market Intermediaries',
+    shortDescription:
+      'Listed retail & institutional brokers, wealth managers, MF-distribution platforms, and the market-infrastructure "picks & shovels" (exchanges, depositories, RTAs). Sub-sector split is by business model, not an official classification -- the whole sector thesis is which model survives SEBI\'s 2024-25 derivatives squeeze.',
+    status: 'active',
+    subSectors: [
+      { id: 'brokers-discount', name: 'Discount / Digital-first Brokers' },
+      { id: 'brokers-fullservice', name: 'Full-service / Traditional Brokers' },
+      { id: 'brokers-wealth', name: 'Wealth Management' },
+      { id: 'brokers-distribution', name: 'MF & Product Distribution' },
+      { id: 'brokers-mii', name: 'Market Infrastructure (Exchanges, Depositories, RTAs)' },
+    ],
+  },
   // Add the next sector here once you're ready to expand further,
   // e.g. { id: 'it-services', name: 'IT Services', status: 'planned', subSectors: [...] }
 ]
