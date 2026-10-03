@@ -17,15 +17,15 @@ export const brokerMetrics: Record<string, BrokerMetricQuarter[]> = {
   'angel-one-ltd': [
     {
       period: 'Jun-2026',
-      totalClientsMn: null,
-      nseActiveClientsMn: null,
-      activeClientShare: null,
-      grossBrokingRevenueCr: null,
-      interestIncomeCr: null,
+      totalClientsMn: 38.59,
+      nseActiveClientsMn: 6.63,
+      activeClientShare: 14.59,
+      grossBrokingRevenueCr: 859,
+      interestIncomeCr: 467,
       interestIncomeShare: 32.6,
-      clientFundingBookCr: 7150,
+      clientFundingBookCr: 7152,
       source:
-        'Q1 FY27 business update & slides (Jul-2026): consolidated revenue ₹1,430 Cr (+25.4% YoY), PAT ₹231 Cr (+102% YoY, -27.8% QoQ); funding book ₹71.5bn period-end (avg ₹61.4bn); interest income 32.6% of gross revenue (vs ~21% in Q1 FY25) — Investing.com, FreePressJournal, ScanX',
+        'Q1 FY27 Investor Presentation (15-Jul-2026): total clients 38.59m (+18.8% YoY); NSE active 6.63m / 14.59% share (NSE data via StartupTalky); rev from ops ₹1,429.7 Cr (+25.4%), PAT ₹231 Cr (+102%); revenue mix gross broking 60.1% / interest 32.6% / distribution 3.0%; funding book ₹7,152 Cr period-end; MF AUM ₹20,600 Cr, AMC AUM ₹620 Cr, Wealth AUM ₹13,440 Cr',
     },
     {
       period: 'Mar-2026',
@@ -65,6 +65,18 @@ export const brokerMetrics: Record<string, BrokerMetricQuarter[]> = {
     },
   ],
   'billionbrains-garage-ventures-ltd': [
+    {
+      period: 'Jun-2026',
+      totalClientsMn: 22.4,
+      nseActiveClientsMn: 13.05,
+      activeClientShare: 28.72,
+      grossBrokingRevenueCr: 1059,
+      interestIncomeCr: null,
+      interestIncomeShare: 19.1,
+      clientFundingBookCr: 3775,
+      source:
+        "Q1 FY27 Shareholders' Letter (15-Jul-2026): 22.4m transacting users (+24% YoY); NSE active 13.05m / 28.72% share (NSE data via StartupTalky); rev from ops ₹1,501 Cr (+66%), PAT ₹735 Cr (+94%, 47.5% margin); income mix equity-derivs 52% / stocks 16.4% / MTF 8.1% / float 8.0% / credit 5.5% — interest+float ≈19.1% (NOT directly comparable to Angel One's interest-income definition); MTF book ₹3,775 Cr (+264% YoY); direct MF AUM ₹1.9 lakh cr; AMC AUM ₹5,491 Cr",
+    },
     {
       period: 'Jun-2025',
       totalClientsMn: 14.0,
