@@ -554,4 +554,91 @@ export const triggers: Trigger[] = [
     typicalSource: 'Company investor presentations, quarterly results, concall transcripts',
     frequency: 'Quarterly',
   },
+
+  // ---------------- BROKERS / CAPITAL MARKET INTERMEDIARIES ----------------
+  {
+    id: 'broker-active-clients',
+    sectorId: 'brokers',
+    category: 'Market Share',
+    name: 'NSE Monthly Active-Client League Table',
+    description:
+      'NSE publishes member-wise active clients (accounts that traded at least once in the last 12 months) every month. This is the cleanest public read on who is gaining and losing retail share -- the single most-watched competitive metric in Indian broking.',
+    whyItMatters:
+      'Active clients are the denominator of every revenue line: broking, MTF interest, cross-sold distribution. Groww has pushed its share from ~26% to ~29% in a year while Zerodha and Angel One shed clients in absolute terms -- a durable share shift decides who compounds and who de-rates, independent of any single quarter\'s volumes.',
+    watchFor: [
+      'Each broker\'s share and MoM/YoY change in active clients',
+      'Groww\'s share ceiling; whether Angel One / Zerodha absolute declines reverse',
+      'Total NSE active base direction (it shrank ~7% in FY26)',
+    ],
+    typicalSource: 'NSE "Business Growth of Capital Market" (member-wise active clients), monthly',
+    frequency: 'Monthly',
+  },
+  {
+    id: 'broker-sebi-regulation',
+    sectorId: 'brokers',
+    category: 'Macro / Policy',
+    name: 'SEBI / Exchange Regulatory Action',
+    description:
+      'SEBI and the exchanges set the rules of the transaction-revenue pool: F&O expiry structure, contract sizes, margining, uniform (true-to-label) charges, upfront premium collection, client-fund upstreaming, suitability/eligibility norms.',
+    whyItMatters:
+      'This is the dominant exogenous driver for the sector -- the broker analogue of trade policy for steel. The 2024-25 package shrank the active base ~7% and knocked ~15-25% off discount brokers\' PBT. Any new rule on expiry tenure or contract size is the single biggest swing factor for exchange and discount-broker volumes.',
+    watchFor: [
+      'New circulars on derivatives (expiry tenure/count, contract size, margins)',
+      'Changes to MII charge structure or STT',
+      'SEBI studies/consultations signalling the direction of travel (e.g. the 91%-lose-money study)',
+    ],
+    typicalSource: 'SEBI circulars & consultation papers, exchange notices, Budget (STT)',
+    frequency: 'Event-driven',
+  },
+  {
+    id: 'broker-turnover-volumes',
+    sectorId: 'brokers',
+    category: 'Macro / Activity',
+    name: 'Market Turnover & F&O Premium Volumes',
+    description:
+      'Cash-market ADTO and equity-derivatives (premium) turnover on NSE/BSE -- the top line of the entire transaction-revenue pool that flat-fee brokers earn ₹20/order on.',
+    whyItMatters:
+      'Broking revenue is high-beta to turnover, which is itself high-beta to a retail trading boom regulators are trying to cool. Combined equity ADTO is still ~18% below the pre-curb (Sep-2024) peak -- watch whether it recovers or the curbs have reset the pool structurally lower.',
+    watchFor: [
+      'F&O premium turnover trend (the profit pool, not notional)',
+      'Cash ADTO trend and delivery vs intraday mix',
+      'BSE index-options share vs NSE (the one regulatory winner)',
+    ],
+    typicalSource: 'NSE/BSE monthly turnover data, exchange fact books',
+    frequency: 'Monthly',
+  },
+  {
+    id: 'broker-revenue-mix',
+    sectorId: 'brokers',
+    category: 'Fundamentals',
+    name: 'Revenue Mix & Funding Book (the diversification pivot)',
+    description:
+      'The split of gross revenue between transaction (broking), interest/financing (mainly margin-trading-facility book), and distribution/AUM-linked fees -- and the size and yield of the MTF/funding book driving the interest line.',
+    whyItMatters:
+      'The whole sector thesis is the pivot away from fragile broking revenue toward recurring/annuity lines. Interest income as a share of gross revenue is the best single gauge of how far a broker has de-risked -- Angel One is at ~33% (from ~21% two years earlier). A growing, well-yielding MTF book is a lending business bolted onto broking.',
+    watchFor: [
+      'Interest income as % of gross revenue, QoQ',
+      'MTF/funding book size, growth and yield',
+      'AUM in AMC/wealth arms and distribution revenue (loans, insurance, bonds)',
+    ],
+    typicalSource: 'Company business updates, investor presentations, concalls (quarterly)',
+    frequency: 'Quarterly',
+  },
+  {
+    id: 'broker-flows-financialization',
+    sectorId: 'brokers',
+    category: 'Macro / Flows',
+    name: 'Demat Additions & SIP Flows (financialization base)',
+    description:
+      'New demat-account additions (CDSL/NSDL) and AMFI monthly SIP inflows + stoppage ratio -- the structural "more Indians investing / saving into markets" base case the whole sector sits on.',
+    whyItMatters:
+      'Demat additions lead the future active-client base; SIP flows are the stable, recurring counterweight to volatile broking revenue and the direct driver of the picks-and-shovels names (CDSL, CAMS, KFin, Prudent, AMC arms). A rising stoppage ratio (crossed 100% in Mar/Apr-2026) is an early warning that the retail saver is tiring.',
+    watchFor: [
+      'Monthly demat-account additions and CDSL/NSDL split',
+      'AMFI monthly SIP inflow (record ₹32,297 Cr in Aug-2026) and stoppage ratio',
+      'Gap between demat growth (up) and active clients (down) -- the current anomaly',
+    ],
+    typicalSource: 'CDSL/NSDL monthly data, AMFI monthly MF data',
+    frequency: 'Monthly',
+  },
 ]

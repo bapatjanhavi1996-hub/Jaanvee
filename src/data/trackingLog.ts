@@ -3,6 +3,80 @@ import type { TrackingLogEntry } from '../types'
 // Seed entries from initial research (July 2026). This log is meant to grow
 // over time — each fired trigger gets a new entry here, newest first.
 export const trackingLog: TrackingLogEntry[] = [
+  // ---------------- BROKERS ----------------
+  {
+    id: 'log-2026-08-broker-league',
+    date: '2026-08-31',
+    sectorId: 'brokers',
+    triggerId: 'broker-active-clients',
+    companyIds: ['billionbrains-garage-ventures-ltd', 'angel-one-ltd'],
+    headline: 'Groww extends broking lead to ~29% share; Zerodha and Angel One lose active clients',
+    detail:
+      'NSE active-client data showed Groww at 13.35m clients / 29.04% share (+10.6% YoY), while Zerodha (6.80m, 14.79%, -6.4% YoY) and Angel One (6.72m, 14.62%, -4.6% YoY) shed clients in absolute terms. The top three now run ~58.5% of the active base. A clear share shift, not just a slowdown -- Groww is out-executing on acquisition from the largest base.',
+    source: 'NSE member-wise active clients via Entrackr / StartupTalky (Aug-2026)',
+    impact: 'Watch',
+  },
+  {
+    id: 'log-2026-08-sip-record',
+    date: '2026-08-31',
+    sectorId: 'brokers',
+    triggerId: 'broker-flows-financialization',
+    companyIds: [],
+    headline: 'Monthly SIP inflow hits record ₹32,297 Cr (+14% YoY)',
+    detail:
+      'AMFI reported a record monthly SIP inflow of ₹32,297 Cr in Aug-2026, up ~14% YoY -- the recurring-flow counterweight to volatile broking revenue, and the direct driver of the picks-and-shovels names (CAMS, KFin, Prudent, AMC arms). Caveat: the SIP stoppage ratio crossed 100% in Mar/Apr-2026, an early sign the retail saver is tiring.',
+    source: 'AMFI monthly data (Aug-2026)',
+    impact: 'Positive',
+  },
+  {
+    id: 'log-2026-07-angelone-q1fy27',
+    date: '2026-07-15',
+    sectorId: 'brokers',
+    triggerId: 'broker-revenue-mix',
+    companyIds: ['angel-one-ltd'],
+    headline: 'Angel One Q1 FY27: PAT doubles YoY as interest income hits ~33% of revenue',
+    detail:
+      'Angel One posted Q1 FY27 revenue ₹1,430 Cr (+25.4% YoY) and PAT ₹231 Cr (+102% YoY, though -27.8% QoQ). Interest income -- mainly the margin-funding (MTF) book -- reached ~32.6% of gross revenue (from ~21% in Q1 FY25); the funding book hit a record ₹71.5bn period-end. The clearest listed evidence of the pivot from fragile broking revenue toward recurring/financing income.',
+    source: 'Angel One Q1 FY27 slides & business update (Jul-2026) — Investing.com, ScanX',
+    impact: 'Positive',
+  },
+  {
+    id: 'log-2026-fy26-active-base',
+    date: '2026-03-31',
+    sectorId: 'brokers',
+    triggerId: 'broker-active-clients',
+    companyIds: [],
+    headline: 'NSE total active-client base shrinks ~7% over FY26',
+    detail:
+      'The NSE active-client base fell ~7% over FY26 to ~4.57 crore even as total demat accounts kept growing -- the SEBI F&O curbs pushed marginal traders out. The gap (accounts up, active clients down) is the single most important sector fact right now: the transaction-revenue pool has been structurally reset lower.',
+    source: 'NSE data via Angel One market update (FY26)',
+    impact: 'Negative',
+  },
+  {
+    id: 'log-2025-11-groww-ipo',
+    date: '2025-11-12',
+    sectorId: 'brokers',
+    triggerId: 'broker-active-clients',
+    companyIds: ['billionbrains-garage-ventures-ltd'],
+    headline: 'Groww lists at a ~14% premium; largest Indian fintech IPO of the year',
+    detail:
+      'Billionbrains Garage Ventures (Groww) listed on 12-Nov-2025 at ₹114 vs a ₹100 issue price, raising ~₹6,630 Cr ($748m). FY25 revenue from operations ₹3,901.7 Cr, PAT ₹1,824.4 Cr (a turnaround from a ₹805 Cr FY24 loss driven by a one-time tax on its India domicile shift). The #1 broker by active clients is now investable.',
+    source: 'TechCrunch, chittorgarh (Nov-2025)',
+    impact: 'Watch',
+  },
+  {
+    id: 'log-2024-10-sebi-package',
+    date: '2024-10-01',
+    sectorId: 'brokers',
+    triggerId: 'broker-sebi-regulation',
+    companyIds: [],
+    headline: 'SEBI true-to-label charges + F&O curbs + STT hike take effect',
+    detail:
+      'The regime-change package landed together from 01-Oct-2024: uniform (true-to-label) MII charges ended discount brokers\' slab-rebate arbitrage (~₹2,000 Cr industry revenue hit, ~15-25% PBT hit); STT on F&O rose; and the equity-index-derivatives framework (one weekly expiry per exchange, ₹15-20 lakh contract size, upfront premium, intraday position monitoring) phased in through Apr-2025. Cash ADTO fell ~19% and equity-derivatives turnover ~27% by Mar-2025.',
+    source: 'SEBI circulars; CRISIL, ICRA, Business Standard',
+    impact: 'Negative',
+  },
+
   {
     id: 'log-2026-06-mpc',
     date: '2026-06-06',

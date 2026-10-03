@@ -23,6 +23,10 @@ export interface Company {
   priceToBV: number | null
   ttmPE: number | null
   note?: string
+  // Set true when the market cap is borderline vs the ₹1,000 Cr threshold or
+  // was not confirmed against a clean sourced print and should be re-checked
+  // against live data (documented in README).
+  verifyMcap?: boolean
 }
 
 export type TriggerFrequency =
@@ -93,6 +97,12 @@ export type CommentaryTheme =
   | 'Demand Outlook'
   | 'Trade Policy Impact'
   | 'Balance Sheet / Leverage'
+  // Broker / capital-market intermediary themes
+  | 'Active Clients / Market Share'
+  | 'Revenue Diversification'
+  | 'Funding Book / MTF'
+  | 'Regulatory Impact'
+  | 'New Products / Platform'
 
 export interface ManagementCommentary {
   id: string
@@ -237,4 +247,69 @@ export interface CementPriceActionPoint {
   company: string
   pctChange: number
   asOf: string
+}
+
+// ============================ BROKERS ============================
+// Company-level, per-quarter operating metrics for brokers / capital-market
+// intermediaries. The generic QuarterlyFinancial table (total income / op
+// profit / PAT) is the P&L trend layer shown for every company; this is the
+// broker-specific operating layer. The whole sector thesis is a revenue-mix
+// story -- transaction (broking) revenue is under structural regulatory
+// pressure, so the fields that matter are the ones that show the pivot away
+// from it: the active-client base (the land-grab), the margin-funding (MTF)
+// book and interest income (the lending pivot), and interest income as a share
+// of gross revenue (how far diversification has actually gone). Left null, not
+// estimated, wherever a company doesn't disclose it (many smaller full-service
+// names report nothing beyond the statutory P&L).
+export interface BrokerMetricQuarter {
+  period: string
+  totalClientsMn: number | null // total registered clients, millions
+  nseActiveClientsMn: number | null // NSE active clients (traded in last 12m), millions
+  activeClientShare: number | null // % of the NSE active-client base
+  grossBrokingRevenueCr: number | null // broking/transaction revenue only (₹ Cr)
+  interestIncomeCr: number | null // interest/financing income, mainly MTF (₹ Cr)
+  interestIncomeShare: number | null // interest income as % of gross revenue
+  clientFundingBookCr: number | null // margin-trading-facility (MTF) / funding book (₹ Cr)
+  source: string
+}
+
+// The active-client league table -- the single most-watched competitive metric
+// in Indian broking. NSE publishes member-wise active clients monthly, so this
+// is the cleanest public read on who is gaining and losing share. Includes the
+// two unlisted giants (Zerodha, Upstox) because you cannot understand the
+// listed names' share without them -- isListed flags what is actually
+// investable.
+export interface BrokerActiveClientRow {
+  broker: string
+  isListed: boolean
+  ticker: string | null
+  activeClientsMn: number | null
+  sharePct: number | null
+  yoyGrowthPct: number | null
+  asOf: string
+}
+
+// Industry-wide backdrop rows (demat accounts, total active base, SIP flows,
+// F&O turnover trend) -- the sector's macro layer, analogous to the RBI/steel
+// aggregate tables. Each row carries its own as-of date and source because
+// they come from different publishers (NSE, CDSL/NSDL, AMFI, SEBI) at
+// different cadences.
+export interface BrokerIndustryRow {
+  metric: string
+  value: string
+  asOf: string
+  source: string
+  note?: string
+}
+
+// SEBI/exchange regulatory actions -- for brokers this is what trade-policy is
+// to steel: the dominant exogenous driver of the sector thesis. The 2024-25
+// derivatives + true-to-label package is the reason transaction revenue is
+// under pressure industry-wide.
+export interface BrokerRegulatoryEvent {
+  date: string
+  measure: string
+  status: 'Effective' | 'Imposed' | 'Proposed' | 'Under review' | 'Eased'
+  detail: string
+  source: string
 }

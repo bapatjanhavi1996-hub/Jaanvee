@@ -3,6 +3,7 @@ import { sectors } from './data/sectors'
 import { companies as bankNbfcCompanies } from './data/companies'
 import { steelCompanies } from './data/steelCompanies'
 import { cementCompanies } from './data/cementCompanies'
+import { brokerCompanies } from './data/brokerCompanies'
 import { triggers } from './data/triggers'
 import { trackingLog } from './data/trackingLog'
 import { quarterlyFinancials as bankNbfcQuarterlyFinancials } from './data/quarterlyFinancials'
@@ -10,6 +11,7 @@ import { steelQuarterlyFinancials } from './data/steelQuarterlyFinancials'
 import { bankMetrics } from './data/bankMetrics'
 import { steelMetrics } from './data/steelMetrics'
 import { cementMetrics } from './data/cementMetrics'
+import { brokerMetrics } from './data/brokerMetrics'
 import { managementCommentary } from './data/managementCommentary'
 import { Sidebar } from './components/Sidebar'
 import { TabNav, type ViewId } from './components/TabNav'
@@ -20,7 +22,7 @@ import { TrackingLog } from './components/TrackingLog'
 import { CompanyDetail } from './components/CompanyDetail'
 import { SectorAggregates } from './components/SectorAggregates'
 
-const companies = [...bankNbfcCompanies, ...steelCompanies, ...cementCompanies]
+const companies = [...bankNbfcCompanies, ...steelCompanies, ...cementCompanies, ...brokerCompanies]
 const quarterlyFinancials = { ...bankNbfcQuarterlyFinancials, ...steelQuarterlyFinancials }
 
 function App() {
@@ -72,6 +74,7 @@ function App() {
             bankQuarters={bankMetrics[selectedCompany.id] ?? []}
             steelQuarters={steelMetrics[selectedCompany.id] ?? []}
             cementQuarters={cementMetrics[selectedCompany.id] ?? []}
+            brokerQuarters={brokerMetrics[selectedCompany.id] ?? []}
             commentary={managementCommentary.filter((c) => c.companyId === selectedCompany.id)}
             onBack={() => setSelectedCompanyId(null)}
           />

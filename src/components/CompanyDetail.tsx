@@ -1,4 +1,4 @@
-import type { BankMetricQuarter, CementMetricQuarter, Company, ManagementCommentary, QuarterlyFinancial, SteelMetricQuarter } from '../types'
+import type { BankMetricQuarter, BrokerMetricQuarter, CementMetricQuarter, Company, ManagementCommentary, QuarterlyFinancial, SteelMetricQuarter } from '../types'
 import { heatColor, heatTextColor } from '../lib/heatmap'
 
 interface CompanyDetailProps {
@@ -8,6 +8,7 @@ interface CompanyDetailProps {
   bankQuarters: BankMetricQuarter[]
   steelQuarters: SteelMetricQuarter[]
   cementQuarters: CementMetricQuarter[]
+  brokerQuarters: BrokerMetricQuarter[]
   commentary: ManagementCommentary[]
   onBack: () => void
 }
@@ -60,7 +61,7 @@ function toAscending(periods: string[], rows: Row[]): { periods: string[]; rows:
   }
 }
 
-export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, steelQuarters, cementQuarters, commentary, onBack }: CompanyDetailProps) {
+export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, steelQuarters, cementQuarters, brokerQuarters, commentary, onBack }: CompanyDetailProps) {
   // All source data (quarters/bankQuarters/steelQuarters) is newest-first --
   // QoQ math below depends on that order. Columns are flipped to oldest-first
   // (left to right) only at the very end, via toAscending(), for display.
@@ -140,6 +141,23 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
 
   const cementSources = Array.from(new Set(cementQuarters.map((q) => q.source).filter(Boolean)))
 
+  const { periods: brokerPeriodsAsc, rows: brokerRows } = toAscending(
+    brokerQuarters.map((q) => q.period),
+    brokerQuarters.length
+      ? [
+          { label: 'Total Clients (m)', values: brokerQuarters.map((q) => q.totalClientsMn), higherIsBetter: true, format: (v) => (v != null ? `${v.toFixed(2)}m` : '—') },
+          { label: 'NSE Active Clients (m)', values: brokerQuarters.map((q) => q.nseActiveClientsMn), higherIsBetter: true, format: (v) => (v != null ? `${v.toFixed(2)}m` : '—') },
+          { label: 'Active-Client Share (%)', values: brokerQuarters.map((q) => q.activeClientShare), higherIsBetter: true, format: formatPct },
+          { label: 'Gross Broking Revenue (₹ Cr)', values: brokerQuarters.map((q) => q.grossBrokingRevenueCr), higherIsBetter: true, format: formatCr },
+          { label: 'Interest Income (₹ Cr)', values: brokerQuarters.map((q) => q.interestIncomeCr), higherIsBetter: true, format: formatCr },
+          { label: 'Interest Income Share (%)', values: brokerQuarters.map((q) => q.interestIncomeShare), higherIsBetter: true, format: formatPct },
+          { label: 'Client Funding Book / MTF (₹ Cr)', values: brokerQuarters.map((q) => q.clientFundingBookCr), higherIsBetter: true, format: formatCr },
+        ]
+      : [],
+  )
+
+  const brokerSources = Array.from(new Set(brokerQuarters.map((q) => q.source).filter(Boolean)))
+
   const themes: ManagementCommentary['theme'][] = [
     'Asset Quality',
     'Growth',
@@ -153,6 +171,11 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
     'Demand Outlook',
     'Trade Policy Impact',
     'Balance Sheet / Leverage',
+    'Active Clients / Market Share',
+    'Revenue Diversification',
+    'Funding Book / MTF',
+    'Regulatory Impact',
+    'New Products / Platform',
   ]
 
   return (
@@ -337,6 +360,49 @@ export function CompanyDetail({ company, subSectorName, quarters, bankQuarters, 
           ) : (
             <p className="text-sm text-zinc-500 dark:text-zinc-400 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4">
               No capacity, production, utilization or EBITDA/tonne data loaded for this company yet.
+            </p>
+          )}
+        </section>
+      )}
+
+      {company.sectorId === 'brokers' && (
+        <section className="mb-8">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
+            Broker Operating Metrics
+          </h3>
+          {brokerRows.length > 0 ? (
+            <>
+              <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+                <table className="text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-zinc-50 dark:bg-zinc-900/50 text-xs uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                      <th className="px-3 py-2 text-left font-medium sticky left-0 bg-zinc-50 dark:bg-zinc-900/50">Particulars</th>
+                      {brokerPeriodsAsc.map((p) => (
+                        <th key={p} className="px-3 py-2 text-right font-medium whitespace-nowrap">
+                          {p}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {brokerRows.map((row) => (
+                      <HeatRow key={row.label} row={row} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {brokerSources.length > 0 && (
+                <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-500">
+                  Sources: {brokerSources.join(' · ')}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-4">
+              No client/market-share, funding-book or revenue-mix data loaded for this company yet.
+              Pilot coverage is deepest for Angel One (best disclosure among the listed names); the
+              sector-wide active-client league table lives under the Sector Data tab. Many smaller
+              full-service and market-infrastructure names disclose little beyond the statutory P&L.
             </p>
           )}
         </section>
