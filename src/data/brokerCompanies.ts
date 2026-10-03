@@ -8,9 +8,19 @@ import type { Company } from '../types'
 //   * Figures carrying `verifyMcap: true` were NOT found in a clean sourced
 //     print during research and are rough placeholders -- the number is
 //     directional only.
-//   * The seven names WITHOUT the flag (Motilal Oswal, 360 ONE, Nuvama,
-//     Prudent, IIFL Capital, Anand Rathi Share & Stock, 5paisa) were taken
-//     from a dated screener print on 2026-10-03.
+//   * Names WITHOUT the flag (Motilal Oswal, 360 ONE, Nuvama, Prudent, IIFL
+//     Capital, Anand Rathi Share & Stock, 5paisa, and the smaller full-service
+//     names SMC Global, Share India, Monarch Networth, Dolat Algotech) were
+//     taken from dated screener/search prints on 2026-09/10.
+//
+// NOTE ON SCOPE: this is the LISTED universe. Several big brokers are not
+// here because they are unlisted or not separately listed: Zerodha, Upstox,
+// Dhan, Fyers, Paytm Money, Mirae/Sharekhan, NJ India Invest (a large but
+// privately-held MF distributor, peer to Prudent), and the bank-led brokers
+// (HDFC Securities, Kotak Securities, SBI Securities, Axis Direct) which sit
+// inside their parent banks. They appear in the league table / thesis in
+// brokerSectorAggregates.ts where they matter for share, not as investable
+// rows here.
 // latestPrice / priceToBV / ttmPE are null across the board (same as cement) --
 // no reliable per-company source surfaced and estimating them would be worse
 // than leaving the gap explicit.
@@ -122,6 +132,114 @@ export const brokerCompanies: Company[] = [
     ttmPE: null,
     verifyMcap: true,
     note: 'South-India-focused full-service broker with a research/advisory heritage; BNP Paribas is a large shareholder. Market cap approximate -- verify.',
+  },
+  {
+    id: 'smc-global-securities-ltd',
+    name: 'SMC Global Securities Ltd.',
+    isin: '',
+    sectorId: 'brokers',
+    subSectorId: 'brokers-fullservice',
+    industryLabel: 'Stock Broking - Full Service',
+    marketCapCr: 2074,
+    latestPrice: null,
+    priceToBV: null,
+    ttmPE: null,
+    note: 'Diversified full-service broker: equities/commodities broking + insurance broking + distribution + NBFC. Mcap as of 02-Oct-2026 (stockanalysis). ISIN not confirmed -- verify.',
+  },
+  {
+    id: 'share-india-securities-ltd',
+    name: 'Share India Securities Ltd.',
+    isin: '',
+    sectorId: 'brokers',
+    subSectorId: 'brokers-fullservice',
+    industryLabel: 'Stock Broking - Tech / Proprietary + Retail',
+    marketCapCr: 4488,
+    latestPrice: null,
+    priceToBV: null,
+    ttmPE: null,
+    note: 'Tech-led broker with a large proprietary-trading/algo book alongside retail; revenue is more prop-trading-driven than a pure client broker, so read the segment split. Mcap from 2026 search. ISIN not confirmed -- verify.',
+  },
+  {
+    id: 'choice-international-ltd',
+    name: 'Choice International Ltd.',
+    isin: '',
+    sectorId: 'brokers',
+    subSectorId: 'brokers-fullservice',
+    industryLabel: 'Diversified Financial Services',
+    marketCapCr: 1119,
+    latestPrice: null,
+    priceToBV: null,
+    ttmPE: null,
+    verifyMcap: true,
+    note: 'Diversified financial-services group (broking + advisory/consulting + NBFC + insurance distribution + govt-advisory). The ₹1,119 Cr Sep-2026 print conflicts with historically much higher valuations -- treat as uncertain and verify. ISIN not confirmed.',
+  },
+  {
+    id: 'monarch-networth-capital-ltd',
+    name: 'Monarch Networth Capital Ltd.',
+    isin: '',
+    sectorId: 'brokers',
+    subSectorId: 'brokers-fullservice',
+    industryLabel: 'Stock Broking - Full Service',
+    marketCapCr: 3024,
+    latestPrice: null,
+    priceToBV: null,
+    ttmPE: null,
+    note: 'Full-service broker + investment banking + wealth/distribution. Mcap as of 04-Sep-2026. ISIN not confirmed -- verify.',
+  },
+  {
+    id: 'arihant-capital-markets-ltd',
+    name: 'Arihant Capital Markets Ltd.',
+    isin: '',
+    sectorId: 'brokers',
+    subSectorId: 'brokers-fullservice',
+    industryLabel: 'Stock Broking - Full Service',
+    marketCapCr: 1023,
+    latestPrice: null,
+    priceToBV: null,
+    ttmPE: null,
+    verifyMcap: true,
+    note: 'Retail-focused full-service broker + distribution + IB. Mcap ~₹1,023 Cr (25-Sep-2026) -- borderline vs the ₹1,000 Cr floor, so verify before including. ISIN not confirmed.',
+  },
+  {
+    id: 'dolat-algotech-ltd',
+    name: 'Dolat Algotech Ltd.',
+    isin: '',
+    sectorId: 'brokers',
+    subSectorId: 'brokers-fullservice',
+    industryLabel: 'Proprietary Trading / Algo',
+    marketCapCr: 1202,
+    latestPrice: null,
+    priceToBV: null,
+    ttmPE: null,
+    note: 'Primarily a PROPRIETARY high-frequency/algo trading firm, not a client-facing retail broker -- included for completeness but its P&L is trading-gains-driven, so it does not fit the active-client/ARPU framework the other names do. Mcap as of 22-Sep-2026. ISIN not confirmed -- verify.',
+  },
+  {
+    id: 'jm-financial-ltd',
+    name: 'JM Financial Ltd.',
+    isin: '',
+    sectorId: 'brokers',
+    subSectorId: 'brokers-fullservice',
+    industryLabel: 'Diversified Financial Services',
+    marketCapCr: 14000,
+    latestPrice: null,
+    priceToBV: null,
+    ttmPE: null,
+    verifyMcap: true,
+    note: 'A diversified financial group (investment banking, lending/mortgage, asset management, wealth, institutional + retail broking). Broking is a MINOR segment of the whole -- do not read it as a pure broker. Market cap approximate -- verify. ISIN not confirmed.',
+  },
+  {
+    id: 'emkay-global-financial-services-ltd',
+    name: 'Emkay Global Financial Services Ltd.',
+    isin: '',
+    sectorId: 'brokers',
+    subSectorId: 'brokers-fullservice',
+    industryLabel: 'Stock Broking - Institutional + Retail',
+    marketCapCr: 900,
+    latestPrice: null,
+    priceToBV: null,
+    ttmPE: null,
+    verifyMcap: true,
+    note: 'Institutional-research-led broker + retail + wealth + IB. Market cap NOT confirmed in research and may be BELOW the ₹1,000 Cr universe floor -- verify before relying on inclusion. ISIN not confirmed.',
   },
 
   // ---------------- WEALTH MANAGEMENT ----------------
