@@ -1,22 +1,26 @@
-export type ViewId = 'overview' | 'triggers' | 'universe' | 'log' | 'sectorData'
+export type ViewId = 'overview' | 'triggers' | 'universe' | 'compare' | 'log' | 'sectorData'
 
 const TABS: { id: ViewId; label: string }[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'triggers', label: 'Triggers' },
   { id: 'sectorData', label: 'Sector Data' },
   { id: 'universe', label: 'Company Universe' },
+  { id: 'compare', label: 'Compare' },
   { id: 'log', label: 'Tracking Log' },
 ]
 
 interface TabNavProps {
   active: ViewId
   onChange: (id: ViewId) => void
+  // Views to hide for the current sector (e.g. Compare only exists for Brokers).
+  hidden?: ViewId[]
 }
 
-export function TabNav({ active, onChange }: TabNavProps) {
+export function TabNav({ active, onChange, hidden = [] }: TabNavProps) {
+  const tabs = TABS.filter((t) => !hidden.includes(t.id))
   return (
     <div className="flex gap-1 border-b border-zinc-200 dark:border-zinc-800 mb-6 overflow-x-auto">
-      {TABS.map((tab) => (
+      {tabs.map((tab) => (
         <button
           key={tab.id}
           type="button"

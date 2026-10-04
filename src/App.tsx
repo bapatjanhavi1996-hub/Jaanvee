@@ -24,6 +24,7 @@ import { CompanyTable } from './components/CompanyTable'
 import { TrackingLog } from './components/TrackingLog'
 import { CompanyDetail } from './components/CompanyDetail'
 import { SectorAggregates } from './components/SectorAggregates'
+import { BrokerCompareTable } from './components/BrokerCompareTable'
 
 const companies = [...bankNbfcCompanies, ...steelCompanies, ...cementCompanies, ...brokerCompanies]
 const quarterlyFinancials = { ...bankNbfcQuarterlyFinancials, ...steelQuarterlyFinancials }
@@ -86,7 +87,7 @@ function App() {
           />
         ) : (
           <>
-            <TabNav active={view} onChange={setView} />
+            <TabNav active={view} onChange={setView} hidden={sector.id === 'brokers' ? [] : ['compare']} />
 
             {view === 'overview' && (
               <SectorOverview
@@ -102,6 +103,15 @@ function App() {
               <CompanyTable
                 sector={sector}
                 companies={sectorCompanies}
+                onSelectCompany={setSelectedCompanyId}
+              />
+            )}
+            {view === 'compare' && sector.id === 'brokers' && (
+              <BrokerCompareTable
+                sector={sector}
+                companies={sectorCompanies}
+                financials={brokerFinancials}
+                metrics={brokerMetrics}
                 onSelectCompany={setSelectedCompanyId}
               />
             )}
