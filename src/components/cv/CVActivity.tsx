@@ -18,7 +18,6 @@ import { crudeDaily, crudeAnnual, crudeSource, crudeSourceLabel } from '../../da
 import { fastagSeries, fastagSource, fastagSourceLabel } from '../../data/cvFastag'
 import {
   dieselEmailChart,
-  crudeAnnualEmailChart,
   crudeDailyEmailChart,
   fastagEmailChart,
 } from './emailCharts'
@@ -441,47 +440,69 @@ function FastagTab() {
 // and so it reads identically to the dashboard tables above.
 function emailHeatCell(v: number | null, values: (number | null)[], text: string) {
   const bg = heatColor(v, values, true)
-  return `<td style="border:1px solid #e4e4e7;padding:2px 6px;text-align:right;background:${bg === 'transparent' ? '#fff' : bg}">${text}</td>`
+  return `<td style="border:1px solid #e4e4e7;padding:2px 6px;text-align:right;white-space:nowrap;background:${bg === 'transparent' ? '#fff' : bg}">${text}</td>`
 }
 
 function buildFreightEmailTable(): string {
+  // Email keeps a trailing 12-month window (rolls forward automatically each month).
+  const months = freightMonths.slice(-12)
+  const start = freightMonths.length - months.length
   const head =
     `<tr><th style="border:1px solid #e4e4e7;padding:2px 6px;text-align:left;background:#f4f4f5">Round-trip 18T (₹)</th>` +
-    freightMonths.map((m) => `<th style="border:1px solid #e4e4e7;padding:2px 6px;background:#f4f4f5">${m}</th>`).join('') +
+    months.map((m) => `<th style="border:1px solid #e4e4e7;padding:2px 6px;white-space:nowrap;background:#f4f4f5">${m}</th>`).join('') +
     `</tr>`
   const body = freightLanes
-    .map(
-      (l) =>
-        `<tr><td style="border:1px solid #e4e4e7;padding:2px 6px;font-weight:600">${l.route}</td>` +
-        l.abs.map((v) => emailHeatCell(v, l.abs, v == null ? '—' : nf(v))).join('') +
-        `</tr>`,
-    )
+    .map((l) => {
+      const abs = l.abs.slice(start)
+      return (
+        `<tr><td style="border:1px solid #e4e4e7;padding:2px 6px;white-space:nowrap;font-weight:600">${l.route}</td>` +
+        abs.map((v) => emailHeatCell(v, abs, v == null ? '—' : nf(v))).join('') +
+        `</tr>`
+      )
+    })
     .join('')
   return `<table style="border-collapse:collapse;font:11px Calibri,Arial,sans-serif">${head}${body}</table>`
 }
 
 function buildSalesEmailTable(): string {
-  const cols = [...cvSalesMonths.slice(-7)] // last 7 months keeps the email readable
-  const idxs = cols.map((m) => cvSalesMonths.indexOf(m))
+  // Absolute units for the last 3 months, FADA YoY (verbatim), computed MoM for Sep,
+  // Q2 FY27 totals and QoQ (vs Q1 FY27). Rows: PV/CV/LCV/MCV/HCV + Construction Equipment.
+  const n = cvSalesMonths.length
+  const th = (t: string, align = 'center') =>
+    `<th style="border:1px solid #e4e4e7;padding:2px 6px;white-space:nowrap;text-align:${align};background:#f4f4f5">${t}</th>`
+  const td = (t: string, extra = '') =>
+    `<td style="border:1px solid #e4e4e7;padding:2px 6px;text-align:right;white-space:nowrap;${extra}">${t}</td>`
+  const neg = (v: number) => (v < 0 ? 'color:#dc2626' : '')
   const head =
-    `<tr><th style="border:1px solid #e4e4e7;padding:2px 6px;text-align:left;background:#f4f4f5">YoY growth % (FADA)</th>` +
-    cols.map((m) => `<th style="border:1px solid #e4e4e7;padding:2px 6px;background:#f4f4f5">${m}</th>`).join('') +
+    `<tr><th style="border:1px solid #e4e4e7;padding:2px 6px;text-align:left;white-space:nowrap;background:#f4f4f5">Category (units)</th>` +
+    th(cvSalesMonths[n - 3]) + th(cvSalesMonths[n - 2]) + th(cvSalesMonths[n - 1]) +
+    th('Sep YoY%') + th('Sep MoM%') + th('Q2 FY27') + th('QoQ%') +
     `</tr>`
   const body = cvSalesRows
-    .map(
-      (r) =>
-        `<tr><td style="border:1px solid #e4e4e7;padding:2px 6px;font-weight:600">${r.label}</td>` +
-        idxs
-          .map((i) => {
-            const v = r.yoy[i]
-            const color = v != null && v < 0 ? 'color:#dc2626' : ''
-            return `<td style="border:1px solid #e4e4e7;padding:2px 6px;text-align:right;${color}">${pctParen(v)}</td>`
-          })
-          .join('') +
-        `</tr>`,
-    )
+    .map((r) => {
+      const jul = r.abs[n - 3] as number
+      const aug = r.abs[n - 2] as number
+      const sep = r.abs[n - 1] as number
+      const yoy = r.yoy[n - 1] as number
+      const mom = Math.round((sep / aug - 1) * 100)
+      const q1 = (r.abs[n - 6] as number) + (r.abs[n - 5] as number) + (r.abs[n - 4] as number)
+      const q2 = jul + aug + sep
+      const qoq = Math.round((q2 / q1 - 1) * 100)
+      return (
+        `<tr><td style="border:1px solid #e4e4e7;padding:2px 6px;white-space:nowrap;font-weight:600">${r.label}</td>` +
+        td(nf(jul)) + td(nf(aug)) + td(nf(sep)) +
+        td(`${yoy}%`, neg(yoy)) + td(`${mom}%`, neg(mom)) + td(nf(q2)) + td(`${qoq}%`, neg(qoq)) +
+        `</tr>`
+      )
+    })
     .join('')
-  return `<table style="border-collapse:collapse;font:11px Calibri,Arial,sans-serif">${head}${body}</table>`
+  // Construction Equipment -- FADA doesn't break this out, so sourced from the Shriram/VAHAN
+  // mobility bulletin (Aug/Sep only); Jul and the quarterly figures are left blank.
+  const ce =
+    `<tr><td style="border:1px solid #e4e4e7;padding:2px 6px;white-space:nowrap;font-weight:600">Construction Equipment*</td>` +
+    td('—') + td(nf(489)) + td(nf(640)) + td('25%') + td('31%') + td('—') + td('—') +
+    `</tr>`
+  return `<table style="border-collapse:collapse;font:11px Calibri,Arial,sans-serif">${head}${body}${ce}</table>`
 }
 
 // Rasterize an inline SVG chart to a PNG data URL so the email keeps its charts
@@ -545,9 +566,6 @@ function EmailTab() {
     }
   }
 
-  const lastDiesel = dieselSeries[dieselSeries.length - 1]
-  const lastCrude = crudeDaily[crudeDaily.length - 1]
-  const lastFastag = fastagSeries[fastagSeries.length - 1]
 
   return (
     <div>
@@ -573,23 +591,29 @@ function EmailTab() {
           <p>Please see below update on CV activity.</p>
 
           <p style={{ fontWeight: 700, marginBottom: 2 }}>A) New Vehicle Sales</p>
-          <p style={{ margin: '2px 0' }}>
-            September was a record month for passenger vehicles. PV retail came in at 4,27,213 units, the
-            best-ever month, up 32% year on year and 6% over August. The headline year-on-year figure is
-            flattered by a weak September 2025 base, when buyers deferred purchases ahead of GST 2.0, so the
-            month-on-month gain and the record print are the cleaner read. FADA expects pending bookings to
-            convert through Navratri and Dussehra, helped by new launches and festive schemes. The main things
-            to watch are elevated PV inventory at roughly 43 to 45 days against the 21-day norm, OEM supply,
-            October price increases and rain-deficient pockets.
-          </p>
-          <p style={{ margin: '2px 0' }}>
-            Commercial vehicles were equally strong. Total CV retail rose 38% year on year to 1,03,557 units,
-            led by heavy commercial vehicles at plus 46% and light commercial vehicles at plus 34%. The strength
-            in heavy trucks and construction-linked segments points to continued momentum in freight,
-            infrastructure and the core economy. For the first half of FY27, from April to September, PV retail
-            is up about 24% year on year.
-          </p>
+          <ul style={{ margin: '2px 0 6px', paddingLeft: 18 }}>
+            <li>
+              <strong>PV had its best-ever month</strong> — 4,27,213 units, <strong>+32% YoY</strong> and{' '}
+              <strong>+6% MoM</strong>. The large YoY is flattered by a weak Sep-2025 base (purchases deferred
+              ahead of GST 2.0), so the record print and the MoM gain are the cleaner read.
+            </li>
+            <li>
+              <strong>CV equally strong</strong> — total CV <strong>+38% YoY to 1,03,557</strong>, led by{' '}
+              <strong>HCV +46%</strong> and LCV +34%. Strength in heavy trucks and construction-linked segments
+              points to momentum in freight, infrastructure and the core economy.
+            </li>
+            <li>
+              FADA expects pending bookings to convert through <strong>Navratri and Dussehra</strong>; watchpoints
+              are elevated PV inventory (<strong>~43-45 days</strong> vs the 21-day norm), OEM supply, October
+              price hikes and rain-deficient pockets.
+            </li>
+            <li>First-half FY27 (Apr-Sep) PV retail is <strong>up ~24% YoY</strong>.</li>
+          </ul>
           <div dangerouslySetInnerHTML={{ __html: buildSalesEmailTable() }} />
+          <p style={{ margin: '2px 0', fontSize: 11, color: '#888' }}>
+            *Construction equipment is not broken out in FADA's release — sourced from the Shriram/VAHAN mobility
+            bulletin (Aug/Sep only). YoY is as reported; MoM and QoQ are computed from the monthly units.
+          </p>
 
           <p style={{ fontWeight: 700, marginBottom: 2, marginTop: 14 }}>B) Freight Rates</p>
           <p style={{ margin: '2px 0' }}>
@@ -608,22 +632,44 @@ function EmailTab() {
           <div style={{ overflowX: 'auto' }} dangerouslySetInnerHTML={{ __html: buildFreightEmailTable() }} />
 
           <p style={{ fontWeight: 700, marginBottom: 2, marginTop: 14 }}>C) Diesel Consumption</p>
-          <p style={{ margin: '2px 0', color: '#666' }}>
-            [commentary — latest {lastDiesel.month}: {nf(lastDiesel.mt)} '000 MT, {pct(lastDiesel.g1)} YoY]
-          </p>
+          <ul style={{ margin: '2px 0 6px', paddingLeft: 18 }}>
+            <li>September consumption was <strong>7,116 '000 MT, up ~5% YoY</strong> and higher than August.</li>
+            <li>
+              The dip from the May-June peak is <strong>seasonal, not structural</strong> — diesel always troughs
+              through the monsoon (August is the annual low) and picks up from October as freight, harvest and
+              construction activity rebuild.
+            </li>
+          </ul>
           <div dangerouslySetInnerHTML={{ __html: dieselEmailChart() }} />
 
           <p style={{ fontWeight: 700, marginBottom: 2, marginTop: 14 }}>D) Crude Oil Prices</p>
-          <p style={{ margin: '2px 0', color: '#666' }}>
-            [commentary — WTI last print {lastCrude[1]} $/bbl on {lastCrude[0]}]
-          </p>
-          <div dangerouslySetInnerHTML={{ __html: crudeAnnualEmailChart() }} />
-          <div style={{ marginTop: 8 }} dangerouslySetInnerHTML={{ __html: crudeDailyEmailChart() }} />
+          <ul style={{ margin: '2px 0 6px', paddingLeft: 18 }}>
+            <li>
+              <strong>WTI ~$103/bbl</strong> (23 Oct); 2026 is averaging <strong>~$86</strong> versus ~$65 in
+              2025. Prices have firmed back above $100 on Gulf risk.
+            </li>
+            <li>
+              <strong>Strait of Hormuz:</strong> flows have partly recovered (~12 mn bpd in October) but vessel
+              attacks are near record levels and Iran disputes the Oman-coast shuttle route — tensions remain
+              elevated since the early-2026 conflict.
+            </li>
+            <li>
+              <strong>India's suppliers (Kpler, Sep-26):</strong> Russia still #1 at <strong>~1.8 mn bpd</strong>,
+              followed by Iraq, Saudi Arabia and the UAE; refiners are adding Venezuelan and Angolan barrels amid
+              the Gulf uncertainty.
+            </li>
+            <li>Net: crude stays <strong>elevated and volatile</strong>, with no clear easing while Hormuz risk persists.</li>
+          </ul>
+          <div dangerouslySetInnerHTML={{ __html: crudeDailyEmailChart() }} />
 
           <p style={{ fontWeight: 700, marginBottom: 2, marginTop: 14 }}>E) FASTag</p>
-          <p style={{ margin: '2px 0', color: '#666' }}>
-            [commentary — latest {lastFastag.month}: ₹{lastFastag.dailyAvg} Cr daily average value]
-          </p>
+          <ul style={{ margin: '2px 0 6px', paddingLeft: 18 }}>
+            <li>
+              September daily average value <strong>₹237 Cr, +11% YoY</strong>; monthly value slipped ~1% MoM
+              purely on fewer days in the month.
+            </li>
+            <li>Toll and mobility activity remains <strong>healthy and rising into the festive season</strong>.</li>
+          </ul>
           <div dangerouslySetInnerHTML={{ __html: fastagEmailChart() }} />
 
           <p style={{ marginTop: 14 }}>Best,</p>

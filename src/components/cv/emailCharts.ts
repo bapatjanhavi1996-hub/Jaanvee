@@ -43,10 +43,10 @@ function lineSVG(title: string, pts: Pt[], color: string, w: number, h: number):
       last = y
     }
   })
+  // Gridlines removed per request -- keep only the y-axis value labels.
   const gridEls = grid
     .map(
       (g) =>
-        `<line x1="${padL}" y1="${yAt(g).toFixed(1)}" x2="${w - padR}" y2="${yAt(g).toFixed(1)}" stroke="${GRID}" stroke-width="1"/>` +
         `<text x="${padL - 4}" y="${(yAt(g) + 3).toFixed(1)}" text-anchor="end" font-size="9" fill="${AXIS}" font-family="Calibri,Arial,sans-serif">${Math.round(g)}</text>`,
     )
     .join('')
@@ -100,13 +100,25 @@ function barSVG(title: string, data: { label: string; v: number }[], color: stri
 }
 
 export const dieselEmailChart = () =>
-  lineSVG("Diesel Consumption — '000 Metric tonnes", dieselSeries.map((d) => ({ label: d.month, v: d.mt })), '#2f5e9e', 680, 210)
+  lineSVG(
+    "Diesel Consumption — '000 Metric tonnes (last 3 years)",
+    dieselSeries.slice(-36).map((d) => ({ label: d.month, v: d.mt })),
+    '#2f5e9e',
+    680,
+    210,
+  )
 
 export const crudeAnnualEmailChart = () =>
   barSVG('$ per barrel — calendar-year average', crudeAnnual.map((a) => ({ label: a.year, v: a.avg })), '#29abe2', 680, 230)
 
 export const crudeDailyEmailChart = () =>
-  lineSVG('$ per barrel — daily (WTI)', crudeDaily.map(([d, v]) => ({ label: d, v })), '#2f5e9e', 680, 210)
+  lineSVG(
+    '$ per barrel — daily WTI (last 3 years)',
+    crudeDaily.slice(-780).map(([d, v]) => ({ label: d, v })),
+    '#2f5e9e',
+    680,
+    210,
+  )
 
 // FASTag chart tracks the monthly Daily Average Value (INR Cr). The source email
 // shows it from Jan-23, so match that window.
