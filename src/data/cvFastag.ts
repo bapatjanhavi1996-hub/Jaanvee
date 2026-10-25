@@ -123,5 +123,5 @@ export const fastagSeries: FastagMonth[] = [
   { month: "Jun-26", banks: null, issuance: null, volumeMn: 362, amountCr: 7215, dailyAvg: 240, mom: 2, annual: 6 },
   { month: "Jul-26", banks: null, issuance: null, volumeMn: 347, amountCr: 7143, dailyAvg: 230, mom: -4, annual: 4 },
   { month: "Aug-26", banks: null, issuance: null, volumeMn: 351, amountCr: 7185, dailyAvg: 232, mom: 1, annual: 4 },
-  { month: "Sep-26", banks: null, issuance: null, volumeMn: 191, amountCr: 3981, dailyAvg: 234, mom: 1, annual: 9 },
+  { month: "Sep-26", banks: null, issuance: null, volumeMn: 337, amountCr: 7096, dailyAvg: 237, mom: -1, annual: 11 },
 ]
