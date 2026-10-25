@@ -203,4 +203,5 @@ export const dieselSeries: DieselMonth[] = [
   { month: "Jun-26", mt: 8605, idx: 1.60, g1: 6, g2: 3 },
   { month: "Jul-26", mt: 8093, idx: 1.50, g1: 10, g2: 6 },
   { month: "Aug-26", mt: 7023, idx: 1.30, g1: 7, g2: 8 },
+  { month: "Sep-26", mt: 7116, idx: 1.32, g1: 5, g2: null },
 ]

@@ -148,6 +148,7 @@ interface WideRow {
   values: (number | null)[]
   summary?: (number | null)[]
   fmt: (v: number | null) => string
+  summaryFmt?: (v: number | null) => string
   redNeg?: boolean
   heat?: boolean // row-wise red->green heatmap on the value cells
 }
@@ -218,7 +219,7 @@ function WideTable({
                     className="px-2 py-1 text-right font-semibold text-zinc-800 dark:text-zinc-200 border-l-2 border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900"
                     style={{ color: r.redNeg && v != null && v < 0 ? '#dc2626' : undefined }}
                   >
-                    {r.fmt(v)}
+                    {(r.summaryFmt ?? r.fmt)(v)}
                   </td>
                 ))}
               </tr>
@@ -264,6 +265,7 @@ function FreightTab() {
           values: l.abs,
           summary: [l.augMomPct, l.augVsFebPct],
           fmt: (v) => (v == null ? '—' : nf(v as number)),
+          summaryFmt: (v) => (v == null ? '—' : `${v}%`),
           heat: true,
         }))}
         summaryCols={['Aug m-o-m %', 'Aug vs Feb %']}
