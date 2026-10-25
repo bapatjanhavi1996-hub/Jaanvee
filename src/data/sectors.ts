@@ -67,6 +67,14 @@ export const sectors: Sector[] = [
       { id: 'brokers-mii', name: 'Market Infrastructure (Exchanges, Depositories, RTAs)' },
     ],
   },
+  {
+    id: 'cv-activity',
+    name: 'CV Activity Tracker',
+    shortDescription:
+      'Monthly commercial-vehicle activity tracker (FADA retail sales, Shriram freight rates, PPAC diesel, WTI crude). A standalone macro dashboard that also renders the monthly CV Activity Update email.',
+    status: 'active',
+    subSectors: [],
+  },
   // Add the next sector here once you're ready to expand further,
   // e.g. { id: 'it-services', name: 'IT Services', status: 'planned', subSectors: [...] }
 ]

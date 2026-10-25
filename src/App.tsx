@@ -25,6 +25,7 @@ import { TrackingLog } from './components/TrackingLog'
 import { CompanyDetail } from './components/CompanyDetail'
 import { SectorAggregates } from './components/SectorAggregates'
 import { BrokerCompareTable } from './components/BrokerCompareTable'
+import { CVActivity } from './components/cv/CVActivity'
 
 const companies = [...bankNbfcCompanies, ...steelCompanies, ...cementCompanies, ...brokerCompanies]
 const quarterlyFinancials = { ...bankNbfcQuarterlyFinancials, ...steelQuarterlyFinancials }
@@ -85,6 +86,8 @@ function App() {
             commentary={managementCommentary.filter((c) => c.companyId === selectedCompany.id)}
             onBack={() => setSelectedCompanyId(null)}
           />
+        ) : sector.id === 'cv-activity' ? (
+          <CVActivity />
         ) : (
           <>
             <TabNav active={view} onChange={setView} hidden={sector.id === 'brokers' ? [] : ['compare']} />
