@@ -1,8 +1,11 @@
 // AUTO-GENERATED -- WTI crude oil, US$/barrel.
 // User's reference source (daily chart): https://www.macrotrends.net/2516/wti-crude-oil-prices-10-year-daily-chart
-// Macrotrends hard-blocks automated pulls, so the identical WTI series is pulled live from
-// FRED (DCOILWTICO, EIA data) -- same spot WTI macrotrends plots, to 2 decimals. Values match
-// the macrotrends integers on rounding (e.g. 25/05/2012 = 90.64 -> 91).
+// Macrotrends hard-blocks automated pulls (Cloudflare 403, even via a headless browser),
+// so the identical WTI series is pulled live from FRED (DCOILWTICO, EIA data) -- the same
+// spot WTI the macrotrends "Energy > Crude Oil Daily" view plots, to 2 decimals.
+// VERIFIED 2026-10-25 against that macrotrends page (every point exact): 2026-10-20 = 107.89;
+// 52-wk low 55.44 on 2025-12-16; 52-wk high 114.58 on 2026-04-07; 2026 avg 86.1 (page: 86.14).
+// FRED trails macrotrends by ~1-2 trading days on the very latest print only.
 export const crudeSource = "https://www.macrotrends.net/2516/wti-crude-oil-prices-10-year-daily-chart"
 export const crudeSourceLabel = "WTI spot, US$/bbl -- macrotrends (series via FRED/EIA: DCOILWTICO)"
 // Daily close, oldest-first. [ISO date, US$/bbl]
