@@ -578,7 +578,19 @@ function EmailTab() {
           <div dangerouslySetInnerHTML={{ __html: buildSalesEmailTable() }} />
 
           <p style={{ fontWeight: 700, marginBottom: 2, marginTop: 14 }}>B) Freight Rates</p>
-          <p style={{ margin: '2px 0', color: '#666' }}>[commentary — 18T round-trip rates, ₹ per trip]</p>
+          <p style={{ margin: '2px 0' }}>
+            Freight rates stayed firm in September. Most 18-tonne round-trip rentals were flat to marginally
+            higher over the month, while the year-on-year increases remained strong across the trunk routes.
+            Delhi-Kolkata is running at ₹1,82,000, up 13% over last year, and Delhi-Mumbai moved up to ₹1,77,000,
+            a 1.1% gain for the month and 9% higher than a year ago. Bengaluru-Mumbai and Kolkata-Guwahati are up
+            11% and 10% respectively over the same period.
+          </p>
+          <p style={{ margin: '2px 0' }}>
+            Shriram's COO noted that rentals held firm on the back of festive dispatches, and that the healthy
+            sales of heavy-duty trucks and construction equipment point to resilient economic activity with
+            continued momentum in infrastructure and the core sectors. The one caution he flagged was that a
+            possible interest rate increase during the festive season could dampen sentiment.
+          </p>
           <div style={{ overflowX: 'auto' }} dangerouslySetInnerHTML={{ __html: buildFreightEmailTable() }} />
 
           <p style={{ fontWeight: 700, marginBottom: 2, marginTop: 14 }}>C) Diesel Consumption</p>
