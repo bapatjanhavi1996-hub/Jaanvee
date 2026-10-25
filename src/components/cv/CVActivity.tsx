@@ -15,14 +15,22 @@ import {
 } from '../../data/cvActivity'
 import { dieselSeries, dieselSource, dieselSourceLabel } from '../../data/cvDiesel'
 import { crudeDaily, crudeAnnual, crudeSource, crudeSourceLabel } from '../../data/cvCrude'
+import { fastagSeries, fastagSource, fastagSourceLabel } from '../../data/cvFastag'
+import {
+  dieselEmailChart,
+  crudeAnnualEmailChart,
+  crudeDailyEmailChart,
+  fastagEmailChart,
+} from './emailCharts'
 
-type CvTab = 'sales' | 'freight' | 'diesel' | 'crude' | 'email'
+type CvTab = 'sales' | 'freight' | 'diesel' | 'crude' | 'fastag' | 'email'
 
 const TABS: { id: CvTab; label: string }[] = [
   { id: 'sales', label: 'New Vehicle Sales' },
   { id: 'freight', label: 'Freight Rates' },
   { id: 'diesel', label: 'Diesel Consumption' },
   { id: 'crude', label: 'Crude Oil Prices' },
+  { id: 'fastag', label: 'FASTag' },
   { id: 'email', label: 'Email Draft' },
 ]
 
@@ -364,6 +372,68 @@ function CrudeTab() {
   )
 }
 
+// ---------------------------------------------------------------- FASTag
+function FastagTab() {
+  const dailyAvgPoints: SeriesPoint[] = fastagSeries
+    .filter((f) => f.dailyAvg != null)
+    .map((f) => ({ label: f.month, value: f.dailyAvg }))
+  const momAll = fastagSeries.map((f) => f.mom)
+  const annAll = fastagSeries.map((f) => f.annual)
+  // newest first so the latest months are visible without scrolling
+  const rows = [...fastagSeries].reverse()
+  return (
+    <div>
+      <SourceBar label={fastagSourceLabel} href={fastagSource} />
+      <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4">
+        NETC (FASTag) monthly statistics. The tracked series is the <strong>Daily Average Value</strong> (₹ Cr),
+        which rises seasonally from September/October. Growth columns colour-graded (red low → green high).
+      </p>
+      <div className="grid grid-cols-1 gap-3">
+        <MiniLineChart
+          title="Average Daily Value per month — FASTag (₹ Cr)"
+          unit="₹ Cr / day"
+          points={dailyAvgPoints}
+          color="#8c8c8c"
+          format={nf}
+        />
+      </div>
+
+      <SectionTitle>NETC FASTag — monthly (most recent first)</SectionTitle>
+      <div className="overflow-y-auto max-h-[28rem] border border-zinc-200 dark:border-zinc-800 rounded-lg">
+        <table className="text-[11px] border-collapse w-full whitespace-nowrap">
+          <thead className="sticky top-0">
+            <tr className="bg-zinc-50 dark:bg-zinc-900">
+              {['Month', 'Banks live', 'Tag issuance', 'Volume (Mn)', 'Amount (₹ Cr)', 'Daily avg (₹ Cr)', 'MoM %', 'YoY %'].map((h) => (
+                <th key={h} className="px-3 py-1.5 text-right first:text-left font-semibold text-zinc-700 dark:text-zinc-300">
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((f) => (
+              <tr key={f.month} className="border-t border-zinc-100 dark:border-zinc-800">
+                <td className="px-3 py-1 text-left font-medium text-zinc-700 dark:text-zinc-300">{f.month}</td>
+                <td className="px-3 py-1 text-right text-zinc-600 dark:text-zinc-400">{f.banks ?? '—'}</td>
+                <td className="px-3 py-1 text-right text-zinc-600 dark:text-zinc-400">{f.issuance == null ? '—' : nf(f.issuance)}</td>
+                <td className="px-3 py-1 text-right text-zinc-600 dark:text-zinc-400">{f.volumeMn ?? '—'}</td>
+                <td className="px-3 py-1 text-right text-zinc-800 dark:text-zinc-200">{f.amountCr == null ? '—' : nf(f.amountCr)}</td>
+                <td className="px-3 py-1 text-right font-semibold text-zinc-900 dark:text-zinc-100">{f.dailyAvg ?? '—'}</td>
+                <td className="px-3 py-1 text-right text-zinc-800 dark:text-zinc-200" style={{ backgroundColor: heatColor(f.mom, momAll, true) }}>
+                  {pct(f.mom)}
+                </td>
+                <td className="px-3 py-1 text-right text-zinc-800 dark:text-zinc-200" style={{ backgroundColor: heatColor(f.annual, annAll, true) }}>
+                  {pct(f.annual)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
 // ---------------------------------------------------------------- Email Draft
 // Inline-styled so a copy keeps the colour grading when pasted into Outlook/Gmail,
 // and so it reads identically to the dashboard tables above.
@@ -412,18 +482,58 @@ function buildSalesEmailTable(): string {
   return `<table style="border-collapse:collapse;font:11px Calibri,Arial,sans-serif">${head}${body}</table>`
 }
 
+// Rasterize an inline SVG chart to a PNG data URL so the email keeps its charts
+// as images when pasted into Outlook/Gmail (which don't render inline SVG).
+async function svgToPng(svg: SVGElement): Promise<{ url: string; w: number; h: number } | null> {
+  const w = Number(svg.getAttribute('width')) || Math.round(svg.getBoundingClientRect().width) || 680
+  const h = Number(svg.getAttribute('height')) || Math.round(svg.getBoundingClientRect().height) || 210
+  const xml = new XMLSerializer().serializeToString(svg)
+  const svgUrl = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml)))
+  const img = new Image()
+  const loaded = new Promise<boolean>((res) => {
+    img.onload = () => res(true)
+    img.onerror = () => res(false)
+  })
+  img.src = svgUrl
+  if (!(await loaded)) return null
+  const scale = 2
+  const canvas = document.createElement('canvas')
+  canvas.width = w * scale
+  canvas.height = h * scale
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return null
+  ctx.scale(scale, scale)
+  ctx.fillStyle = '#ffffff'
+  ctx.fillRect(0, 0, w, h)
+  ctx.drawImage(img, 0, 0, w, h)
+  return { url: canvas.toDataURL('image/png'), w, h }
+}
+
 function EmailTab() {
   const ref = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
 
   const copy = async () => {
-    if (!ref.current) return
-    const html = ref.current.innerHTML
+    const src = ref.current
+    if (!src) return
     try {
+      const clone = src.cloneNode(true) as HTMLElement
+      const liveSvgs = Array.from(src.querySelectorAll('svg'))
+      const cloneSvgs = Array.from(clone.querySelectorAll('svg'))
+      for (let i = 0; i < liveSvgs.length; i++) {
+        const png = await svgToPng(liveSvgs[i])
+        if (!png) continue
+        const img = document.createElement('img')
+        img.src = png.url
+        img.setAttribute('width', String(png.w))
+        img.setAttribute('height', String(png.h))
+        img.style.display = 'block'
+        cloneSvgs[i].replaceWith(img)
+      }
       await navigator.clipboard.write([
         new ClipboardItem({
-          'text/html': new Blob([html], { type: 'text/html' }),
-          'text/plain': new Blob([ref.current.innerText], { type: 'text/plain' }),
+          'text/html': new Blob([clone.innerHTML], { type: 'text/html' }),
+          'text/plain': new Blob([src.innerText], { type: 'text/plain' }),
         }),
       ])
       setCopied(true)
@@ -436,6 +546,7 @@ function EmailTab() {
   const lastSales = cvSalesMonths[cvSalesMonths.length - 1]
   const lastDiesel = dieselSeries[dieselSeries.length - 1]
   const lastCrude = crudeDaily[crudeDaily.length - 1]
+  const lastFastag = fastagSeries[fastagSeries.length - 1]
 
   return (
     <div>
@@ -474,18 +585,27 @@ function EmailTab() {
           <p style={{ margin: '2px 0', color: '#666' }}>
             [commentary — latest {lastDiesel.month}: {nf(lastDiesel.mt)} '000 MT, {pct(lastDiesel.g1)} YoY]
           </p>
+          <div dangerouslySetInnerHTML={{ __html: dieselEmailChart() }} />
 
           <p style={{ fontWeight: 700, marginBottom: 2, marginTop: 14 }}>D) Crude Oil Prices</p>
           <p style={{ margin: '2px 0', color: '#666' }}>
             [commentary — WTI last print {lastCrude[1]} $/bbl on {lastCrude[0]}]
           </p>
+          <div dangerouslySetInnerHTML={{ __html: crudeAnnualEmailChart() }} />
+          <div style={{ marginTop: 8 }} dangerouslySetInnerHTML={{ __html: crudeDailyEmailChart() }} />
+
+          <p style={{ fontWeight: 700, marginBottom: 2, marginTop: 14 }}>E) FASTag</p>
+          <p style={{ margin: '2px 0', color: '#666' }}>
+            [commentary — latest {lastFastag.month}: ₹{lastFastag.dailyAvg} Cr daily average value]
+          </p>
+          <div dangerouslySetInnerHTML={{ __html: fastagEmailChart() }} />
 
           <p style={{ marginTop: 14 }}>Best,</p>
           <p>Janhavi</p>
         </div>
       </div>
       <p className="text-[11px] text-zinc-400 dark:text-zinc-500 mt-2">
-        Sources — Sales: FADA press release · Freight: Shriram monthly bulletin · Diesel: PPAC · Crude: macrotrends (WTI).
+        Sources — Sales: FADA press release · Freight: Shriram monthly bulletin · Diesel: PPAC · Crude: macrotrends (WTI) · FASTag: NPCI NETC.
       </p>
     </div>
   )
@@ -523,6 +643,7 @@ export function CVActivity() {
       {tab === 'freight' && <FreightTab />}
       {tab === 'diesel' && <DieselTab />}
       {tab === 'crude' && <CrudeTab />}
+      {tab === 'fastag' && <FastagTab />}
       {tab === 'email' && <EmailTab />}
     </div>
   )
