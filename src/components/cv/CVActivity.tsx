@@ -545,7 +545,6 @@ function EmailTab() {
     }
   }
 
-  const lastSales = cvSalesMonths[cvSalesMonths.length - 1]
   const lastDiesel = dieselSeries[dieselSeries.length - 1]
   const lastCrude = crudeDaily[crudeDaily.length - 1]
   const lastFastag = fastagSeries[fastagSeries.length - 1]
@@ -574,8 +573,21 @@ function EmailTab() {
           <p>Please see below update on CV activity.</p>
 
           <p style={{ fontWeight: 700, marginBottom: 2 }}>A) New Vehicle Sales</p>
-          <p style={{ margin: '2px 0', color: '#666' }}>
-            [commentary — latest month {lastSales}; FADA growth table below]
+          <p style={{ margin: '2px 0' }}>
+            September was a record month for passenger vehicles. PV retail came in at 4,27,213 units, the
+            best-ever month, up 32% year on year and 6% over August. The headline year-on-year figure is
+            flattered by a weak September 2025 base, when buyers deferred purchases ahead of GST 2.0, so the
+            month-on-month gain and the record print are the cleaner read. FADA expects pending bookings to
+            convert through Navratri and Dussehra, helped by new launches and festive schemes. The main things
+            to watch are elevated PV inventory at roughly 43 to 45 days against the 21-day norm, OEM supply,
+            October price increases and rain-deficient pockets.
+          </p>
+          <p style={{ margin: '2px 0' }}>
+            Commercial vehicles were equally strong. Total CV retail rose 38% year on year to 1,03,557 units,
+            led by heavy commercial vehicles at plus 46% and light commercial vehicles at plus 34%. The strength
+            in heavy trucks and construction-linked segments points to continued momentum in freight,
+            infrastructure and the core economy. For the first half of FY27, from April to September, PV retail
+            is up about 24% year on year.
           </p>
           <div dangerouslySetInnerHTML={{ __html: buildSalesEmailTable() }} />
 
